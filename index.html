@@ -1056,4 +1056,490 @@
             /* Header adjustments */
             .header {
                 padding: 20px !important;
-                margin-bottom: 20px
+                margin-bottom: 20px !important;
+                page-break-after: avoid !important;
+            }
+            .header h1 { font-size: 22pt !important; }
+            .header .subtitle { font-size: 14pt !important; }
+            
+            .section-header {
+                font-size: 16pt !important;
+                padding: 10px 15px !important;
+                margin: 15px 0 !important;
+                page-break-after: avoid !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="platform-container">
+        <div class="platform-header">
+            <h1>RiskReportAI <span class="gemini-badge">Gemini</span></h1>
+            <p class="subtitle">הזן את מפתח ה-API שלך והעלה קובץ מסמך כדי להפיק דוח ניהול סיכונים מפורט</p>
+        </div>
+
+        <div class="api-setup" id="api-setup">
+            <h3>הגדרת מפתח API</h3>
+            <p>כדי להתחיל, אנא הזן את מפתח ה-API של Google Gemini.</p>
+            <div class="api-input-group">
+                <input type="password" id="api-key-input" class="api-input" placeholder="הזן את מפתח ה-API כאן...">
+                <button id="api-key-btn" class="api-button">שמור מפתח</button>
+            </div>
+            <div id="api-status" class="api-status"></div>
+        </div>
+
+        <div class="upload-zone" id="upload-zone">
+            <div class="upload-icon">☁️</div>
+            <div class="upload-title">העלה את מסמך הפרויקט שלך</div>
+            <div class="upload-subtitle">גרור ושחרר קובץ (DOCX, PDF, TXT) או לחץ כדי לבחור</div>
+            <input type="file" id="file-input" hidden>
+            <button class="upload-button" id="upload-button">בחר קובץ...</button>
+        </div>
+
+        <div class="processing-container" id="processing-container">
+             <div class="file-info">
+                <strong>מעבד קובץ:</strong> <span id="file-name"></span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="processing-steps">
+                <div class="step" id="step1">
+                    <div class="step-number">1</div>
+                    <div>ניתוח מבנה</div>
+                </div>
+                <div class="step" id="step2">
+                    <div class="step-number">2</div>
+                    <div>זיהוי סיכונים</div>
+                </div>
+                <div class="step" id="step3">
+                    <div class="step-number">3</div>
+                    <div>הערכת חדשנות</div>
+                </div>
+                <div class="step" id="step4">
+                    <div class="step-number">4</div>
+                    <div>הפקת דוח</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="control-buttons" id="control-buttons">
+        <button class="control-btn new-report-btn" id="new-report-btn" title="התחל דוח חדש">🔄 דוח חדש</button>
+        <button class="control-btn edit-toggle" id="edit-toggle" title="הפעל/כבה מצב עריכה">✏️ מצב עריכה</button>
+        <button class="control-btn pdf-export" id="pdf-export" title="ייצא כקובץ PDF">📄 ייצא ל-PDF</button>
+    </div>
+
+    <div class="report-container" id="report-container">
+        <div class="container">
+            <header class="header">
+                <h1 class="editable" data-placeholder="שם הפרויקט">פרויקט "פיניקס": שדרוג מערכת הליבה</h1>
+                <p class="subtitle editable" data-placeholder="תקציר הפרויקט">ניתוח סיכונים והזדמנויות עבור הדור הבא של הפלטפורמה הארגונית</p>
+                <div class="date-badge">תאריך הפקה: <span id="report-date"></span></div>
+            </header>
+
+            <nav class="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="#overview" class="active">סקירת פרויקט</a></li>
+                    <li><a href="#risks">ניהול סיכונים</a></li>
+                    <li><a href="#strategies">אסטרטגיות ופתרונות</a></li>
+                    <li><a href="#innovation">מדדי חדשנות</a></li>
+                    <li><a href="#regulation">היבטים רגולטוריים</a></li>
+                </ul>
+            </nav>
+            
+            <section id="overview" class="section project-overview">
+                <h2 class="section-header">סקירת הפרויקט</h2>
+                <div class="overview-grid">
+                    <div class="overview-card">
+                        <h4><span class="icon">🎯</span> מטרת העל</h4>
+                        <p class="editable">החלפת מערכת הליבה המיושנת בפלטפורמה מודולרית, מבוססת ענן, שתתמוך בצמיחה העתידית של החברה ותשפר את חווית המשתמש.</p>
+                    </div>
+                    <div class="overview-card">
+                        <h4><span class="icon">👥</span> בעלי עניין מרכזיים</h4>
+                        <p class="editable">הנהלה בכירה, מחלקת IT, צוותי פיתוח, משתמשי קצה, לקוחות אסטרטגיים, ועדת היגוי.</p>
+                    </div>
+                    <div class="overview-card">
+                        <h4><span class="icon">💰</span> מסגרת תקציב</h4>
+                        <p class="editable">$5,000,000</p>
+                    </div>
+                    <div class="overview-card">
+                        <h4><span class="icon">⏳</span> ציר זמן משוער</h4>
+                        <p class="editable">24 חודשים (Q3 2025 - Q3 2027)</p>
+                    </div>
+                </div>
+                <div class="goals-section">
+                    <h3>יעדים ותוצרים מרכזיים</h3>
+                    <div class="goal-item editable"><strong>יעד 1:</strong> השקת סביבת הפיתוח והבדיקות (MVP) תוך 6 חודשים.</div>
+                    <div class="deliverable-item editable"><strong>תוצר:</strong> תשתית ענן פונקציונלית עם מודול הליבה הראשון.</div>
+                    <div class="goal-item editable"><strong>יעד 2:</strong> העברת 50% מהמשתמשים לפלטפורמה החדשה תוך 18 חודשים.</div>
+                    <div class="deliverable-item editable"><strong>תוצר:</strong> מערכת יציבה עם 5 מודולים מרכזיים וכלל נתוני המשתמשים שהועברו.</div>
+                </div>
+            </section>
+            
+            <section id="risks" class="section risks-container">
+                <h2 class="section-header">ניהול סיכונים</h2>
+                <div class="risk-summary">
+                    <div class="summary-card"><div class="summary-number very-high">2</div><div>סיכונים קריטיים</div></div>
+                    <div class="summary-card"><div class="summary-number high">4</div><div>סיכונים גבוהים</div></div>
+                    <div class="summary-card"><div class="summary-number medium">5</div><div>סיכונים בינוניים</div></div>
+                    <div class="summary-card"><div class="summary-number low">3</div><div>סיכונים נמוכים</div></div>
+                </div>
+
+                <div class="risks-grid">
+                    <div class="risk-card risk-very-high">
+                        <div class="risk-header">
+                            <div class="risk-title editable">חריגה מתקציב הפרויקט</div>
+                            <div class="risk-severity severity-very-high">קריטי</div>
+                        </div>
+                        <p class="risk-description editable">סיכון משמעותי לחריגה מהתקציב המאושר עקב הערכת חסר של מורכבות המיגרציה ועלויות רישוי בלתי צפויות.</p>
+                        <div class="risk-metrics">
+                            <div class="metric"><div class="metric-value">80%</div><div class="metric-label">הסתברות</div></div>
+                            <div class="metric"><div class="metric-value">9/10</div><div class="metric-label">השפעה</div></div>
+                            <div class="metric"><div class="metric-value high">גבוהה</div><div class="metric-label">רמת סיכון</div></div>
+                        </div>
+                        <div class="risk-impact">
+                            <div class="impact-title">השפעות אפשריות:</div>
+                            <ul class="impact-list">
+                                <li class="editable">עצירת הפרויקט או צמצום משמעותי של תכולתו.</li>
+                                <li class="editable">פגיעה בתזרים המזומנים של החברה.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="risk-card risk-high">
+                        <div class="risk-header">
+                            <div class="risk-title editable">קושי באימוץ המערכת החדשה על ידי עובדים</div>
+                            <div class="risk-severity severity-high">גבוה</div>
+                        </div>
+                        <p class="risk-description editable">התנגדות לשינוי וקושי בהסתגלות לממשקים ותהליכי עבודה חדשים עלולים להוביל לירידה בפריון ולתסכול.</p>
+                        <p class="risk-opportunity editable"><strong>הזדמנות:</strong> תהליך הטמעה נכון יכול להפוך את העובדים לשגרירי השינוי ולהוביל לשיפור תהליכים שלא נצפה מראש.</p>
+                         <div class="risk-metrics">
+                            <div class="metric"><div class="metric-value">60%</div><div class="metric-label">הסתברות</div></div>
+                            <div class="metric"><div class="metric-value">7/10</div><div class="metric-label">השפעה</div></div>
+                            <div class="metric"><div class="metric-value medium">בינונית</div><div class="metric-label">רמת סיכון</div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="strategies" class="section strategies-section">
+                <h2 class="section-header">אסטרטגיות ופתרונות</h2>
+                <div class="strategy-card">
+                    <div class="strategy-header editable">אסטרטגיית ניהול תקציב פרואקטיבית</div>
+                    <div class="strategy-content">
+                        <div class="strategy-grid">
+                             <div class="strategy-item editable">
+                                <h5>פיקוח שוטף</h5>
+                                <p>הקמת ועדת היגוי תקציבית עם פגישות דו-שבועיות למעקב אחר הוצאות בפועל מול תחזית.</p>
+                            </div>
+                            <div class="strategy-item editable">
+                                <h5>בקרת שינויים קפדנית (CR)</h5>
+                                <p>כל בקשה לשינוי תעבור ניתוח עלות-תועלת ותחייב אישור של הוועדה.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="strategy-card">
+                    <div class="strategy-header editable">תוכנית הטמעה וניהול שינוי</div>
+                    <div class="strategy-content">
+                        <div class="strategy-grid">
+                             <div class="strategy-item editable">
+                                <h5>הדרכות מותאמות אישית</h5>
+                                <p>סדנאות מעשיות בקבוצות קטנות המותאמות לתפקיד ולרמת המשתמשים.</p>
+                                 <div class="timeline-badge">שלב ב' - 12 חודשים</div>
+                            </div>
+                            <div class="strategy-item editable">
+                                <h5>מינוי "מובילי שינוי"</h5>
+                                <p>זיהוי עובדים מובילים בכל מחלקה שישמשו כתומכים טכניים וחברתיים למערכת.</p>
+                                <div class="timeline-badge">שלב א' - 3 חודשים</div>
+                            </div>
+                        </div>
+                         <div class="summary-box committee-recommendations">
+                            <h4><span class="icon">💡</span> המלצות ועדת ההיגוי</h4>
+                            <p class="editable">מומלץ להקצות 15% מהתקציב הכולל כרזרבה לבלתי צפוי. כמו כן, יש להתחיל את תהליך ניהול השינוי כבר ביום הראשון של הפרויקט ולא להמתין לשלבי הסיום.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="innovation" class="section innovation-section">
+                 <h2 class="section-header">מדדי חדשנות</h2>
+                <div class="innovation-score">82<span style="font-size: 0.4em;">/100</span></div>
+                <p class="editable">הפרויקט מציג רמת חדשנות גבוהה, בעיקר בזכות המעבר לארכיטקטורת ענן והטמעת כלי AI.</p>
+                <div class="innovation-components">
+                    <div class="component-card">
+                        <div class="component-score">90</div>
+                        <div class="component-title">חדשנות טכנולוגית</div>
+                        <p class="editable">שימוש בטכנולוגיות Cutting-Edge</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-score">75</div>
+                        <div class="component-title">חדשנות תהליכית</div>
+                        <p class="editable">שיפור ואוטומציה של תהליכי עבודה</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-score">80</div>
+                        <div class="component-title">חדשנות עסקית</div>
+                        <p class="editable">פוטנציאל לפיתוח מודלים עסקיים חדשים</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="regulation" class="section regulation-section">
+                <h2 class="section-header">היבטים רגולטוריים</h2>
+                <table class="regulation-table">
+                    <thead>
+                        <tr>
+                            <th>תחום רגולטורי</th>
+                            <th>השפעה על הפרויקט</th>
+                            <th>פעולות נדרשות</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="editable"><strong>GDPR - הגנת פרטיות</strong></td>
+                            <td class="editable">הפרויקט כולל עיבוד מידע אישי של לקוחות אירופאיים. חובה לעמוד בתקנות מחמירות.</td>
+                            <td class="editable">ביצוע סקר Privacy Impact Assessment (PIA), מינוי יועץ משפטי חיצוני, ווידוא הצפנת נתונים.</td>
+                        </tr>
+                         <tr>
+                            <td class="editable"><strong>נגישות אתרים (WCAG 2.1)</strong></td>
+                            <td class="editable">הממשק החדש חייב להיות נגיש למשתמשים עם מוגבלויות.</td>
+                            <td class="editable">שילוב בדיקות נגישות אוטומטיות וידניות כחלק מתהליך הפיתוח (CI/CD).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <footer class="footer">
+                דוח זה הופק באמצעות RiskReportAI | כל הזכויות שמורות © 2025
+            </footer>
+        </div>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- DOM Element Selection ---
+        const platformContainer = document.querySelector('.platform-container');
+        const apiSetup = document.getElementById('api-setup');
+        const apiKeyInput = document.getElementById('api-key-input');
+        const apiKeyBtn = document.getElementById('api-key-btn');
+        const apiStatus = document.getElementById('api-status');
+        
+        const uploadZone = document.getElementById('upload-zone');
+        const fileInput = document.getElementById('file-input');
+        const uploadButton = document.getElementById('upload-button');
+        
+        const processingContainer = document.getElementById('processing-container');
+        const fileNameSpan = document.getElementById('file-name');
+        const progressFill = document.getElementById('progress-fill');
+        const steps = [
+            document.getElementById('step1'),
+            document.getElementById('step2'),
+            document.getElementById('step3'),
+            document.getElementById('step4')
+        ];
+
+        const reportContainer = document.getElementById('report-container');
+        const controlButtons = document.getElementById('control-buttons');
+        const newReportBtn = document.getElementById('new-report-btn');
+        const editToggleBtn = document.getElementById('edit-toggle');
+        const pdfExportBtn = document.getElementById('pdf-export');
+        
+        const reportDateSpan = document.getElementById('report-date');
+        const editableElements = document.querySelectorAll('.editable');
+
+        let isEditMode = false;
+        
+        // --- Main Initialization ---
+        function init() {
+            setupEventListeners();
+            checkApiKey();
+            reportDateSpan.textContent = new Date().toLocaleDateString('he-IL');
+        }
+
+        // --- State Management ---
+        function showScreen(screen) {
+            // Hide all platform screens first
+            apiSetup.classList.remove('active');
+            uploadZone.classList.remove('active');
+            processingContainer.classList.remove('active');
+            // Show the target screen
+            if(screen) screen.classList.add('active');
+        }
+
+        function checkApiKey() {
+            const savedKey = localStorage.getItem('geminiApiKey');
+            if (savedKey) {
+                apiKeyInput.value = savedKey;
+                showScreen(uploadZone);
+            } else {
+                showScreen(apiSetup);
+            }
+        }
+        
+        // --- Event Listeners ---
+        function setupEventListeners() {
+            apiKeyBtn.addEventListener('click', handleApiKeySave);
+            uploadButton.addEventListener('click', () => fileInput.click());
+            uploadZone.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', (e) => handleFileSelect(e.target.files));
+
+            // Drag and Drop listeners
+            uploadZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadZone.classList.add('dragover');
+            });
+            uploadZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('dragover');
+            });
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('dragover');
+                handleFileSelect(e.dataTransfer.files);
+            });
+            
+            // Control button listeners
+            newReportBtn.addEventListener('click', resetApp);
+            editToggleBtn.addEventListener('click', toggleEditMode);
+            pdfExportBtn.addEventListener('click', exportToPdf);
+        }
+
+        // --- Core Functions ---
+        function handleApiKeySave() {
+            const key = apiKeyInput.value.trim();
+            if (key) {
+                localStorage.setItem('geminiApiKey', key);
+                apiStatus.className = 'api-status success';
+                apiStatus.textContent = 'המפתח נשמר בהצלחה!';
+                setTimeout(() => {
+                    apiStatus.style.display = 'none';
+                    showScreen(uploadZone);
+                }, 1500);
+            } else {
+                apiStatus.className = 'api-status error';
+                apiStatus.textContent = 'נא להזין מפתח API חוקי.';
+                apiStatus.style.display = 'block';
+            }
+        }
+        
+        function handleFileSelect(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                fileNameSpan.textContent = file.name;
+                showScreen(processingContainer);
+                simulateProcessing();
+            }
+        }
+
+        function simulateProcessing() {
+            let progress = 0;
+            const totalSteps = steps.length;
+            
+            const stepActions = [
+                () => { progress = 25; steps[0].classList.add('active', 'current'); },
+                () => { progress = 50; steps[0].classList.remove('current'); steps[1].classList.add('active', 'current'); },
+                () => { progress = 75; steps[1].classList.remove('current'); steps[2].classList.add('active', 'current'); },
+                () => { progress = 100; steps[2].classList.remove('current'); steps[3].classList.add('active', 'current'); },
+                () => { displayReport(); }
+            ];
+            
+            let currentStep = 0;
+            const interval = setInterval(() => {
+                if(currentStep < stepActions.length) {
+                    stepActions[currentStep]();
+                    progressFill.style.width = `${progress}%`;
+                    currentStep++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 1000); // 1 second per step
+        }
+
+        function displayReport() {
+            platformContainer.classList.add('hidden');
+            setTimeout(() => {
+                platformContainer.style.display = 'none';
+                reportContainer.classList.add('active');
+                controlButtons.classList.add('active');
+                setupScrollSpy();
+            }, 500); // Wait for fade-out transition
+        }
+        
+        function resetApp() {
+            // Fade out report
+            reportContainer.classList.remove('active');
+            controlButtons.classList.remove('active');
+            
+            setTimeout(() => {
+                // Reset platform UI
+                platformContainer.style.display = 'block';
+                setTimeout(() => platformContainer.classList.remove('hidden'), 50); // Allow display change to register
+                
+                // Reset progress bar and steps
+                progressFill.style.width = '0%';
+                steps.forEach(step => step.className = 'step');
+
+                // Go to correct initial screen
+                checkApiKey();
+            }, 500);
+        }
+        
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            editToggleBtn.classList.toggle('active', isEditMode);
+            editToggleBtn.innerHTML = isEditMode ? '✅ שמור שינויים' : '✏️ מצב עריכה';
+            
+            editableElements.forEach(el => {
+                el.setAttribute('contenteditable', isEditMode);
+            });
+            
+            if (!isEditMode) {
+                 // Here you could add logic to actually save the changes
+                console.log("Saving changes (simulation)...");
+            }
+        }
+        
+        function exportToPdf() {
+            // Temporarily disable edit mode for a clean print
+            const wasEditing = isEditMode;
+            if (wasEditing) toggleEditMode();
+            
+            window.print();
+            
+            // Restore edit mode if it was active
+            if (wasEditing) {
+                setTimeout(() => toggleEditMode(), 1000);
+            }
+        }
+        
+        // --- Scroll Spy for Navigation ---
+        function setupScrollSpy() {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: '-30% 0px -70% 0px' }); // Activates when section is in the middle 40% of the viewport
+
+            sections.forEach(section => observer.observe(section));
+        }
+
+        // --- Start the App ---
+        init();
+    });
+    </script>
+</body>
+</html>
