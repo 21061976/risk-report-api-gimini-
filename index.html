@@ -9,10 +9,10 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Arial', 'David', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            background: #f5f5f5;
-            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #2c3e50;
             min-height: 100vh;
         }
 
@@ -23,7 +23,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.8);
             display: none;
             justify-content: center;
             align-items: center;
@@ -38,9 +38,9 @@
         }
 
         .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
             border-top-color: white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -55,33 +55,33 @@
         .platform-container {
             max-width: 900px;
             margin: 20px auto;
-            background: white;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .platform-container.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
         }
 
         .platform-header { text-align: center; margin-bottom: 40px; }
-        .platform-header h1 { 
-            font-size: 1.8em; 
-            color: #1a472a; 
-            margin-bottom: 10px; 
-            font-weight: normal;
-        }
-        .platform-header .subtitle { 
-            font-size: 1em; 
-            color: #666; 
-            margin-bottom: 20px; 
-        }
+        .platform-header h1 { font-size: 2.8em; color: #2c3e50; margin-bottom: 10px; }
+        .platform-header .subtitle { font-size: 1.3em; color: #7f8c8d; margin-bottom: 30px; }
 
         /* API Key Setup */
         .api-setup {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            border-right: 4px solid #2c5282;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #4285f4;
             margin-bottom: 30px;
+            display: none;
         }
+        .api-setup.active { display: block; }
 
         .api-input-group {
             display: flex;
@@ -91,39 +91,40 @@
 
         .api-input {
             flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 0.95em;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
             font-family: monospace;
         }
 
         .api-input:focus {
-            border-color: #2c5282;
+            border-color: #4285f4;
             outline: none;
         }
 
         .api-button {
-            padding: 10px 20px;
-            background: #2c5282;
+            padding: 12px 25px;
+            background: #4285f4;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.95em;
-            transition: background 0.3s ease;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
 
         .api-button:hover {
-            background: #1a365d;
+            background: #3367d6;
+            transform: translateY(-2px);
         }
 
         .api-status {
             margin-top: 10px;
-            padding: 8px;
-            border-radius: 4px;
+            padding: 10px;
+            border-radius: 8px;
             display: none;
-            font-size: 0.9em;
         }
 
         .api-status.success {
@@ -142,81 +143,83 @@
 
         /* Upload Zone */
         .upload-zone {
-            border: 2px dashed #2c5282;
-            border-radius: 8px;
-            padding: 40px;
+            border: 3px dashed #4285f4;
+            border-radius: 20px;
+            padding: 60px 40px;
             text-align: center;
             transition: all 0.3s ease;
             cursor: pointer;
             margin-bottom: 30px;
             display: none;
-            background: #fafafa;
         }
 
         .upload-zone.active { display: block; }
 
         .upload-zone:hover { 
-            border-color: #1a365d; 
-            background: #f0f0f0; 
+            border-color: #3367d6; 
+            background: rgba(66, 133, 244, 0.05); 
+            transform: translateY(-5px); 
         }
         
         .upload-zone.dragover {
-            border-color: #38a169;
-            background: #f0fff4;
+            border-color: #34a853;
+            background: rgba(52, 168, 83, 0.1);
+            transform: scale(1.02);
         }
 
-        .upload-icon { font-size: 3em; color: #2c5282; margin-bottom: 15px; }
-        .upload-title { font-size: 1.3em; color: #333; margin-bottom: 10px; font-weight: normal; }
-        .upload-subtitle { font-size: 0.95em; color: #666; margin-bottom: 20px; }
+        .upload-icon { font-size: 4em; color: #4285f4; margin-bottom: 20px; }
+        .upload-title { font-size: 2em; color: #2c3e50; margin-bottom: 15px; font-weight: bold; }
+        .upload-subtitle { font-size: 1.1em; color: #7f8c8d; margin-bottom: 30px; }
 
         .upload-button {
-            background: #2c5282;
+            background: linear-gradient(135deg, #4285f4 0%, #3367d6 100%);
             color: white;
             border: none;
-            padding: 10px 30px;
-            border-radius: 4px;
-            font-size: 0.95em;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .upload-button:hover {
-            background: #1a365d;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(66, 133, 244, 0.4);
         }
 
         /* Processing Styles */
         .processing-container { text-align: center; display: none; }
         .processing-container.active { display: block; }
         .file-info { 
-            background: #e6f7ff; 
+            background: #e8f8f5; 
             padding: 15px; 
-            border-radius: 6px; 
-            border-right: 4px solid #1890ff; 
+            border-radius: 10px; 
+            border-left: 4px solid #34a853; 
             margin-bottom: 30px; 
             text-align: right;
-            font-size: 0.95em;
         }
         
         .progress-bar { 
             width: 100%; 
-            height: 8px; 
-            background: #f0f0f0; 
-            border-radius: 4px; 
+            height: 12px; 
+            background: #ecf0f1; 
+            border-radius: 6px; 
             overflow: hidden; 
             margin-bottom: 20px; 
         }
         
         .progress-fill { 
             height: 100%; 
-            background: #2c5282; 
+            background: linear-gradient(90deg, #4285f4, #34a853); 
             width: 0%; 
             transition: width 0.8s ease; 
         }
 
         .processing-steps {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
             margin: 30px 0;
         }
 
@@ -225,13 +228,19 @@
         .step.current { opacity: 1; transform: scale(1.05); }
 
         .step-number {
-            width: 40px; height: 40px; border-radius: 50%; background: #e0e0e0; color: #666;
-            display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;
-            font-weight: normal; font-size: 1em;
+            width: 50px; height: 50px; border-radius: 50%; background: #bdc3c7; color: white;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;
+            font-weight: bold; font-size: 1.2em;
         }
 
-        .step.active .step-number { background: #2c5282; color: white; }
-        .step.current .step-number { background: #38a169; color: white; }
+        .step.active .step-number { background: #4285f4; }
+        .step.current .step-number { background: #34a853; animation: pulse 1.5s infinite; }
+
+        @keyframes pulse { 
+            0% { transform: scale(1); } 
+            50% { transform: scale(1.1); } 
+            100% { transform: scale(1); } 
+        }
 
         /* Control Buttons */
         .control-buttons { 
@@ -241,102 +250,137 @@
             z-index: 1000; 
             display: flex; 
             flex-direction: column; 
-            gap: 8px; 
+            gap: 10px; 
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+        .control-buttons.active {
+             opacity: 1;
+             pointer-events: auto;
         }
         
         .control-btn { 
-            padding: 8px 16px; 
+            padding: 15px 25px; 
             border: none; 
-            border-radius: 4px; 
+            border-radius: 25px; 
             cursor: pointer; 
-            font-size: 0.9em; 
+            font-size: 1em; 
+            font-weight: bold; 
             transition: all 0.3s ease; 
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-            background: white;
-            color: #333;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         
-        .new-report-btn:hover { background: #f0f0f0; }
-        .edit-toggle { background: #2c5282; color: white; }
-        .edit-toggle.active { background: #38a169; }
-        .pdf-export { background: #c53030; color: white; }
-        .pdf-export.exporting { background: #ed8936; cursor: not-allowed; }
+        .new-report-btn { background: #95a5a6; color: white; }
+        .edit-toggle { background: #4285f4; color: white; }
+        .edit-toggle.active { background: #34a853; }
+        .pdf-export { background: #ea4335; color: white; }
+        .pdf-export.exporting { background: #fbbc04; cursor: not-allowed; }
+        .control-btn:hover { transform: translateY(-2px); }
 
         /* Success Message */
         .success-message {
             position: fixed; 
-            top: 80px; 
+            top: 100px; 
             right: 20px; 
-            background: #38a169; 
+            background: #34a853; 
             color: white;
-            padding: 12px 20px; 
-            border-radius: 4px; 
-            font-size: 0.9em;
+            padding: 15px 25px; 
+            border-radius: 10px; 
+            font-weight: bold; 
             opacity: 0;
             transform: translateX(400px); 
             transition: all 0.3s ease; 
             z-index: 1001;
-            max-width: 300px; 
+            max-width: 350px; 
             white-space: pre-line;
         }
         .success-message.show { opacity: 1; transform: translateX(0); }
 
-        /* Report Container */
+        /* Report Container - EXACTLY MATCHING ORIGINAL */
         .report-container { 
             display: none; 
             max-width: 1200px; 
-            margin: 0 auto; 
-            background: white; 
-            border-radius: 8px; 
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+            margin: 20px auto; 
+            background: rgba(255, 255, 255, 0.98); 
+            border-radius: 20px; 
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15); 
             overflow: hidden; 
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
-        .report-container.active { display: block; }
+        .report-container.active { 
+            display: block; 
+            opacity: 1;
+            transform: scale(1);
+        }
 
-        /* Report Styles */
+        /* === EXACT COPY OF ORIGINAL REPORT STYLES === */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
             overflow: hidden;
         }
 
         .header {
-            background: #1a472a;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             color: white;
-            padding: 40px;
+            padding: 50px 40px;
             text-align: center;
             position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
         }
 
         .header h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
-            font-weight: normal;
+            font-size: 3em;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .header .subtitle {
-            font-size: 1.1em;
+            font-size: 1.4em;
             opacity: 0.9;
-            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 10px;
         }
 
         .date-badge {
             display: inline-block;
             background: rgba(255,255,255,0.2);
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            margin-top: 10px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 15px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
         }
 
         /* Navigation Menu */
         .nav-menu {
             position: sticky;
             top: 0;
-            background: #2c5282;
-            z-index: 100;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         .nav-links {
@@ -354,13 +398,15 @@
 
         .nav-links a {
             display: block;
-            padding: 15px 10px;
-            color: #e0e0e0;
+            padding: 18px 20px;
+            color: #bdc3c7;
             text-decoration: none;
             text-align: center;
-            font-size: 0.85em;
+            font-weight: 600;
+            font-size: 0.95em;
             transition: all 0.3s ease;
-            border-left: 1px solid rgba(255,255,255,0.1);
+            border-left: 1px solid #2c3e50;
+            position: relative;
         }
 
         .nav-links li:first-child a {
@@ -369,512 +415,566 @@
 
         .nav-links a:hover,
         .nav-links a.active {
-            background: #1a365d;
+            background: #2c3e50;
             color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: #4285f4;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 80%;
         }
 
         /* Sections */
         .section {
-            scroll-margin-top: 60px;
+            scroll-margin-top: 80px;
         }
 
         .section-header {
-            background: #e53e3e;
+            background: linear-gradient(135deg, #ea4335 0%, #c23321 100%);
             color: white;
-            padding: 20px 30px;
-            font-size: 1.5em;
-            font-weight: normal;
+            padding: 25px 40px;
+            font-size: 2.2em;
+            font-weight: bold;
             text-align: center;
             margin: 0;
+            position: relative;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 3px;
         }
 
         .project-overview {
-            padding: 30px;
-            background: #f7fafc;
+            padding: 40px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
 
         .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .overview-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #4285f4;
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .overview-card h4 {
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .overview-card .icon {
+            font-size: 1.5em;
+        }
+
+        .goals-section {
+            background: white;
+            margin: 30px 40px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .goals-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .goal-item, .deliverable-item {
+            background: #f8f9fa;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 10px;
+            border-right: 4px solid #34a853;
+            transition: all 0.3s ease;
+        }
+
+        .goal-item:hover, .deliverable-item:hover {
+            background: #e9ecef;
+            transform: translateX(-5px);
+        }
+
+        .risks-container {
+            padding: 40px;
+            background: white;
+        }
+
+        .risk-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .summary-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .very-high { color: #ea4335; }
+        .high { color: #fbbc04; }
+        .medium { color: #f9ab00; }
+        .low { color: #34a853; }
+
+        .risks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .risk-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            transition: all 0.3s ease;
+            border-top: 6px solid;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .risk-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .risk-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .risk-very-high { border-top-color: #ea4335; }
+        .risk-high { border-top-color: #fbbc04; }
+        .risk-medium { border-top-color: #f9ab00; }
+        .risk-low { border-top-color: #34a853; }
+
+        .risk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .risk-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            flex: 1;
+        }
+
+        .risk-severity {
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .severity-very-high { background: #ea4335; }
+        .severity-high { background: #fbbc04; }
+        .severity-medium { background: #f9ab00; color: #2c3e50; }
+        .severity-low { background: #34a853; }
+
+        .risk-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .metric {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .risk-description, .risk-opportunity {
+            color: #34495e;
+            line-height: 1.7;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-right: 4px solid #bdc3c7;
+        }
+
+        .risk-opportunity {
+            border-right-color: #34a853;
+            margin-top: 10px;
+        }
+        
+        .risk-impact {
+            margin-top: 20px;
+        }
+
+        .impact-title {
+            font-weight: bold;
+            color: #ea4335;
+            margin-bottom: 10px;
+        }
+
+        .impact-list {
+            list-style: none;
+            padding-right: 15px;
+        }
+
+        .impact-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+            position: relative;
+        }
+
+        .impact-list li::before {
+            content: '⚠️';
+            margin-left: 10px;
+        }
+
+        .opportunity-title {
+            font-weight: bold;
+            color: #34a853;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .opportunity-list {
+            list-style: none;
+            padding-right: 15px;
+        }
+
+        .opportunity-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+            position: relative;
+        }
+
+        .opportunity-list li::before {
+            content: '✅';
+            margin-left: 10px;
+        }
+
+        .strategies-section {
+            padding: 50px 40px;
+            background: linear-gradient(135deg, #ecf0f1 0%, #bdc3c7 100%);
+        }
+
+        .strategy-card {
+            background: white;
+            margin: 30px 0;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .strategy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .strategy-header {
+            background: linear-gradient(135deg, #34a853 0%, #1e7e34 100%);
+            color: white;
+            padding: 25px 30px;
+            font-weight: bold;
+            font-size: 1.3em;
+            position: relative;
+        }
+
+        .strategy-header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 30px;
+            width: 40px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 2px;
+        }
+
+        .strategy-content {
+            padding: 30px;
+        }
+
+        .strategy-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
 
-        .overview-card {
-            background: white;
-            padding: 20px;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border-top: 3px solid #2c5282;
-            transition: transform 0.3s ease;
-        }
-
-        .overview-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .overview-card h4 {
-            color: #2d3748;
-            margin-bottom: 8px;
-            font-size: 1em;
-            font-weight: normal;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .overview-card .icon {
-            font-size: 1.2em;
-        }
-
-        .goals-section {
-            background: white;
-            margin: 20px 30px;
-            padding: 25px;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .goals-section h3 {
-            color: #2d3748;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-            text-align: center;
-            font-weight: normal;
-        }
-
-        .goal-item, .deliverable-item {
-            background: #f7fafc;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 4px;
-            border-right: 3px solid #38a169;
-            transition: all 0.3s ease;
-            font-size: 0.95em;
-        }
-
-        .goal-item:hover, .deliverable-item:hover {
-            background: #edf2f7;
-            transform: translateX(-3px);
-        }
-
-        .risks-container {
-            padding: 30px;
-            background: white;
-        }
-
-        .risk-summary {
+        .strategy-detail {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .summary-card {
-            background: #f7fafc;
-            padding: 20px;
-            border-radius: 6px;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .summary-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .summary-number {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .very-high { color: #c53030; }
-        .high { color: #ed8936; }
-        .medium { color: #d69e2e; }
-        .low { color: #38a169; }
-
-        .risks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
 
-        .risk-card {
-            background: white;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            transition: all 0.3s ease;
-            border-top: 4px solid;
-        }
-
-        .risk-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .risk-very-high { border-top-color: #c53030; }
-        .risk-high { border-top-color: #ed8936; }
-        .risk-medium { border-top-color: #d69e2e; }
-        .risk-low { border-top-color: #38a169; }
-
-        .risk-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            gap: 10px;
-        }
-
-        .risk-title {
-            font-size: 1.1em;
-            color: #2d3748;
-            flex: 1;
-            font-weight: normal;
-        }
-
-        .risk-severity {
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.8em;
-            color: white;
-            white-space: nowrap;
-        }
-
-        .severity-very-high { background: #c53030; }
-        .severity-high { background: #ed8936; }
-        .severity-medium { background: #d69e2e; }
-        .severity-low { background: #38a169; }
-
-        .risk-metrics {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin: 15px 0;
-            text-align: center;
-        }
-
-        .metric {
-            background: #f7fafc;
-            padding: 10px;
-            border-radius: 4px;
-        }
-
-        .metric-value {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #2d3748;
-        }
-
-        .metric-label {
-            font-size: 0.8em;
-            color: #718096;
-            margin-top: 2px;
-        }
-
-        .risk-description, .risk-opportunity {
-            color: #4a5568;
-            line-height: 1.6;
-            background: #f7fafc;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 10px;
-            border-right: 3px solid #cbd5e0;
-            font-size: 0.95em;
-        }
-
-        .risk-opportunity {
-            border-right-color: #38a169;
-        }
-        
-        .risk-impact {
-            margin-top: 15px;
-        }
-
-        .impact-title {
-            font-weight: bold;
-            color: #c53030;
-            margin-bottom: 8px;
-            font-size: 0.95em;
-        }
-
-        .impact-list {
-            list-style: none;
-            padding-right: 10px;
-        }
-
-        .impact-list li {
-            padding: 5px 0;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 0.9em;
-        }
-
-        .impact-list li::before {
-            content: '•';
-            margin-left: 8px;
-            color: #c53030;
-        }
-
-        .opportunity-title {
-            font-weight: bold;
-            color: #38a169;
-            margin-top: 15px;
-            margin-bottom: 8px;
-            font-size: 0.95em;
-        }
-
-        .opportunity-list {
-            list-style: none;
-            padding-right: 10px;
-        }
-
-        .opportunity-list li {
-            padding: 5px 0;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 0.9em;
-        }
-
-        .opportunity-list li::before {
-            content: '✓';
-            margin-left: 8px;
-            color: #38a169;
-        }
-
-        .strategies-section {
-            padding: 40px;
-            background: #f7fafc;
-        }
-
-        .strategy-card {
-            background: white;
-            margin: 20px 0;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .strategy-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .strategy-header {
-            background: #38a169;
-            color: white;
-            padding: 20px 25px;
-            font-size: 1.1em;
-            font-weight: normal;
-        }
-
-        .strategy-content {
-            padding: 25px;
-        }
-
-        .strategy-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .strategy-detail {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
         .strategy-item, .detail-item {
-            background: #f7fafc;
-            padding: 15px;
-            border-radius: 4px;
-            border-right: 3px solid #38a169;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-right: 4px solid #34a853;
             transition: all 0.3s ease;
-            font-size: 0.9em;
         }
 
         .strategy-item:hover, .detail-item:hover {
-            background: #edf2f7;
-            transform: translateX(-2px);
+            background: #e9ecef;
+            transform: translateX(-3px);
         }
 
         .strategy-item h5, .detail-item h5 {
-            color: #2b6cb0;
-            margin-bottom: 6px;
-            font-size: 0.95em;
-            font-weight: normal;
+            color: #34a853;
+            margin-bottom: 8px;
+            font-size: 1.1em;
         }
 
         .timeline-badge {
             display: inline-block;
-            background: #2c5282;
+            background: #4285f4;
             color: white;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-size: 0.75em;
-            margin-top: 8px;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-top: 10px;
         }
 
         .summary-box {
             background: white;
-            padding: 25px;
-            border-radius: 6px;
-            margin: 20px 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
         }
 
         .committee-recommendations {
-            background: #e6f7ff;
-            padding: 20px;
-            border-radius: 6px;
-            margin-top: 20px;
-            border-right: 4px solid #1890ff;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            background: #f0f8ff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 6px solid #4285f4;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
 
         .committee-recommendations h4 {
-            color: #2d3748;
-            font-size: 1.1em;
-            margin-bottom: 10px;
+            color: #34495e;
+            font-size: 1.4em;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: normal;
+            gap: 10px;
         }
 
         .committee-recommendations .editable {
-            font-size: 0.95em;
-            line-height: 1.6;
-            color: #4a5568;
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #555;
         }
 
         .innovation-section {
-            background: #4a5568;
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
             color: white;
-            padding: 40px;
+            padding: 50px 40px;
             text-align: center;
             position: relative;
         }
 
         .innovation-score {
-            font-size: 3.5em;
+            font-size: 5em;
             font-weight: bold;
-            margin: 20px 0;
+            margin: 30px 0;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
         }
 
         .innovation-components {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
         }
 
         .component-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 6px;
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
         }
 
         .component-card:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
         }
 
         .component-score {
-            font-size: 2em;
+            font-size: 2.5em;
             font-weight: bold;
-            color: #fbbf24;
-            margin-bottom: 8px;
+            color: #fbbc04;
+            margin-bottom: 10px;
         }
 
         .component-title {
-            font-size: 0.95em;
-            margin-bottom: 8px;
-            font-weight: normal;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         .regulation-section {
-            padding: 30px;
-            background: #f7fafc;
+            padding: 40px;
+            background: #ecf0f1;
         }
 
         .regulation-table {
             width: 100%;
             background: white;
-            border-radius: 6px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            margin: 15px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            margin: 20px 0;
+            border-collapse: collapse;
         }
 
         .regulation-table th,
         .regulation-table td {
-            padding: 15px;
+            padding: 20px;
             text-align: right;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #ecf0f1;
             vertical-align: top;
-            font-size: 0.9em;
         }
 
         .regulation-table th {
-            background: #2d3748;
+            background: #34495e;
             color: white;
-            font-weight: normal;
+            font-weight: bold;
         }
 
         .regulation-table tr:hover {
-            background: #f7fafc;
+            background: #f8f9fa;
         }
 
         .footer {
-            background: #2d3748;
+            background: #2c3e50;
             color: white;
             text-align: center;
-            padding: 20px;
-            font-size: 0.85em;
+            padding: 30px;
+            font-size: 0.9em;
         }
 
         /* Editable Styles */
         .editable {
-            padding: 2px;
+            padding: 3px;
             border-radius: 3px;
             transition: all 0.3s ease;
         }
 
         .editable[contenteditable="true"] {
-            background: rgba(44, 82, 130, 0.1);
-            border: 1px dashed #2c5282;
+            background: rgba(66, 133, 244, 0.1);
+            border: 2px dashed #4285f4;
             outline: none;
             cursor: text;
-            padding: 4px;
+            padding: 5px;
         }
 
         .editable[contenteditable="true"]:hover {
-            background: rgba(44, 82, 130, 0.15);
+            background: rgba(66, 133, 244, 0.2);
         }
 
         .editable[contenteditable="true"]:focus {
-            background: rgba(44, 82, 130, 0.1);
-            box-shadow: 0 0 5px rgba(44, 82, 130, 0.3);
+            background: rgba(66, 133, 244, 0.15);
+            box-shadow: 0 0 10px rgba(66, 133, 244, 0.5);
         }
 
         /* Gemini Badge */
         .gemini-badge {
             display: inline-block;
-            background: #f0f0f0;
-            color: #666;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-size: 0.7em;
-            margin-right: 8px;
-            font-weight: normal;
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 50%, #fbbc04 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-left: 10px;
+            font-weight: bold;
         }
 
         /* Mobile Responsive */
@@ -891,6 +991,7 @@
                 justify-content: center; 
                 margin-bottom: 20px; 
                 flex-wrap: wrap;
+                opacity: 1; /* Always visible on mobile after report gen */
             }
             
             .header h1 { font-size: 2.2em; }
@@ -906,7 +1007,7 @@
         /* Enhanced Print Styles for Perfect PDF Export */
         @media print {
             /* Hide UI elements */
-            .control-buttons, .success-message, .platform-container { 
+            .control-buttons, .success-message, .platform-container, .nav-menu { 
                 display: none !important; 
             }
             
@@ -921,1346 +1022,38 @@
                 -webkit-print-color-adjust: exact !important;
                 color-adjust: exact !important;
                 print-color-adjust: exact !important;
-                font-size: 12pt !important;
+                font-size: 11pt !important;
                 line-height: 1.4 !important;
                 background: white !important;
             }
             
-            .report-container { 
+            .report-container, .container { 
                 max-width: none !important; 
                 box-shadow: none !important; 
                 border-radius: 0 !important;
                 margin: 0 !important;
                 padding: 0 !important;
+                display: block !important;
+                opacity: 1 !important;
+                transform: none !important;
             }
-            
-            .container {
-                max-width: none !important;
+
+            /* Content adjustments */
+            .section {
+                page-break-inside: avoid;
+                padding: 0 !important;
                 margin: 0 !important;
-                border-radius: 0 !important;
+            }
+            .risk-card, .strategy-card, .overview-card, .summary-box {
+                page-break-inside: avoid !important;
                 box-shadow: none !important;
+                border: 1px solid #eee;
+            }
+            .risks-grid, .overview-grid, .strategy-grid {
+                grid-template-columns: 1fr !important;
             }
             
             /* Header adjustments */
             .header {
-                padding: 30px 20px !important;
-                margin-bottom: 20px !important;
-                page-break-after: avoid !important;
-            }
-            
-            .header h1 {
-                font-size: 24pt !important;
-                margin-bottom: 10px !important;
-            }
-            
-            .header .subtitle {
-                font-size: 14pt !important;
-                margin-bottom: 8px !important;
-            }
-            
-            .date-badge {
-                font-size: 10pt !important;
-                padding: 5px 12px !important;
-            }
-            
-            /* Navigation - compact for print */
-            .nav-menu { 
-                position: static !important;
-                page-break-after: avoid !important;
-            }
-            
-            .nav-links {
-                flex-wrap: wrap !important;
-                font-size: 9pt !important;
-            }
-            
-            .nav-links a {
-                padding: 8px 10px !important;
-                font-size: 9pt !important;
-            }
-            
-            /* Section headers */
-            .section-header {
-                font-size: 18pt !important;
-                padding: 15px 20px !important;
-                margin: 15px 0 !important;
-                page-break-after: avoid !important;
-            }
-            
-            /* Project overview grid */
-            .project-overview {
                 padding: 20px !important;
-                page-break-inside: avoid !important;
-            }
-            
-            .overview-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 15px !important;
-                margin-top: 15px !important;
-            }
-            
-            .overview-card {
-                padding: 15px !important;
-                margin-bottom: 10px !important;
-                page-break-inside: avoid !important;
-                font-size: 11pt !important;
-            }
-            
-            .overview-card h4 {
-                font-size: 12pt !important;
-                margin-bottom: 8px !important;
-            }
-            
-            /* Goals and deliverables */
-            .goals-section {
-                margin: 15px 20px !important;
-                padding: 15px !important;
-                page-break-inside: avoid !important;
-            }
-            
-            .goals-section h3 {
-                font-size: 14pt !important;
-                margin-bottom: 12px !important;
-            }
-            
-            .goal-item, .deliverable-item {
-                padding: 12px !important;
-                margin: 8px 0 !important;
-                font-size: 11pt !important;
-                page-break-inside: avoid !important;
-            }
-            
-            /* Risk management section */
-            .risks-container {
-                padding: 20px !important;
-            }
-            
-            .risk-summary {
-                grid-template-columns: repeat(4, 1fr) !important;
-                gap: 10px !important;
-                margin-bottom: 20px !important;
-                page-break-inside: avoid !important;
-            }
-            
-            .summary-card {
-                padding: 15px !important;
-                font-size: 10pt !important;
-            }
-            
-            .summary-number {
-                font-size: 24pt !important;
-                margin-bottom: 5px !important;
-            }
-            
-            /* Risk cards - ensure they don't break across pages */
-            .risks-grid {
-                grid-template-columns: 1fr !important;
-                gap: 15px !important;
-            }
-            
-            .risk-card {
-                padding: 15px !important;
-                margin-bottom: 15px !important;
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-                font-size: 11pt !important;
-            }
-            
-            .risk-title {
-                font-size: 14pt !important;
-                margin-bottom: 10px !important;
-            }
-            
-            .risk-severity {
-                font-size: 9pt !important;
-                padding: 4px 8px !important;
-            }
-            
-            .risk-metrics {
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 8px !important;
-                margin: 10px 0 !important;
-            }
-            
-            .metric {
-                padding: 8px !important;
-            }
-            
-            .metric-value {
-                font-size: 16pt !important;
-            }
-            
-            .metric-label {
-                font-size: 9pt !important;
-            }
-            
-            .risk-description {
-                padding: 12px !important;
-                margin-top: 10px !important;
-                font-size: 10pt !important;
-                line-height: 1.3 !important;
-            }
-            
-            .impact-list, .opportunity-list {
-                margin: 8px 0 !important;
-            }
-            
-            .impact-list li, .opportunity-list li {
-                padding: 4px 0 !important;
-                font-size: 10pt !important;
-            }
-            
-            /* Strategies section */
-            .strategies-section {
-                padding: 20px !important;
-            }
-            
-            .strategy-card {
-                margin: 15px 0 !important;
-                page-break-inside: avoid !important;
-            }
-            
-            .strategy-header {
-                padding: 15px 20px !important;
-                font-size: 14pt !important;
-            }
-            
-            .strategy-content {
-                padding: 15px !important;
-                font-size: 11pt !important;
-            }
-            
-            .detail-item {
-                padding: 10px !important;
-                margin: 8px 0 !important;
-                font-size: 10pt !important;
-            }
-            
-            .timeline-badge {
-                font-size: 8pt !important;
-                padding: 3px 8px !important;
-            }
-            
-            /* Innovation section */
-            .innovation-section {
-                padding: 20px !important;
-                page-break-inside: avoid !important;
-            }
-            
-            .innovation-score {
-                font-size: 36pt !important;
-                margin: 15px 0 !important;
-            }
-            
-            .innovation-components {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 15px !important;
-            }
-            
-            .component-card {
-                padding: 15px !important;
-                font-size: 11pt !important;
-            }
-            
-            .component-score {
-                font-size: 20pt !important;
-                margin-bottom: 8px !important;
-            }
-            
-            /* Regulation table */
-            .regulation-section {
-                padding: 20px !important;
-            }
-            
-            .regulation-table {
-                font-size: 10pt !important;
-            }
-            
-            .regulation-table th,
-            .regulation-table td {
-                padding: 8px !important;
-                font-size: 10pt !important;
-            }
-            
-            /* Executive summary */
-            .summary-box {
-                padding: 15px !important;
-                margin: 15px 0 !important;
-                page-break-inside: avoid !important;
-                font-size: 11pt !important;
-            }
-            
-            .summary-box h3 {
-                font-size: 16pt !important;
-                margin-bottom: 12px !important;
-            }
-            
-            .summary-box p {
-                line-height: 1.4 !important;
-                margin-bottom: 10px !important;
-            }
-            
-            /* Recommendations */
-            #recommendations ul li {
-                font-size: 11pt !important;
-                padding: 10px !important;
-                margin-bottom: 8px !important;
-                page-break-inside: avoid !important;
-            }
-            
-            /* Footer */
-            .footer {
-                padding: 15px !important;
-                font-size: 10pt !important;
-                page-break-inside: avoid !important;
-            }
-            
-            /* General page break rules */
-            .section { 
-                page-break-inside: avoid;
-                break-inside: avoid;
-            }
-            
-            h1, h2, h3, h4, h5 {
-                page-break-after: avoid !important;
-            }
-            
-            /* Force page breaks before major sections */
-            #risks, #strategies, #innovation, #regulation-compliance, #executive-summary-section {
-                page-break-before: auto !important;
-            }
-            
-            /* Ensure colors print correctly */
-            * {
-                -webkit-print-color-adjust: exact !important;
-                color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-        }
-
-        html { scroll-behavior: smooth; }
-    </style>
-</head>
-<body>
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <h2>מעבד את המסמך...</h2>
-            <p id="loadingStatus">מתחבר ל-Google Gemini AI...</p>
-        </div>
-    </div>
-
-    <div class="success-message" id="successMessage"></div>
-
-    <div class="control-buttons" id="controlButtons" style="display: none;">
-        <button class="control-btn new-report-btn" onclick="showUploadStep()">📄 דוח חדש</button>
-        <button class="control-btn edit-toggle" onclick="toggleEdit()">🎨 התחל עריכה</button>
-        <button class="control-btn pdf-export" onclick="exportToPDF()">📄 ייצוא ל-PDF</button>
-    </div>
-
-    <!-- Step 1: API Setup & Upload -->
-    <div class="platform-container" id="uploadStep">
-        <div class="platform-header">
-            <h1>🤖 מערכת ניהול סיכונים <span class="gemini-badge">מופעל ע"י Gemini</span></h1>
-            <div class="subtitle">ניתוח וייצור דוחות ניהול סיכונים מתקדמים</div>
-        </div>
-
-        <div class="api-setup" id="apiSetup">
-            <h3>🔑 הגדרת מפתח API של Google Gemini</h3>
-            <p>להפעלת המערכת, הכנס את מפתח ה-API של Gemini:</p>
-            <div class="api-input-group">
-                <input type="password" class="api-input" id="apiKeyInput" 
-                       placeholder="AIza..." 
-                       value="">
-                <button class="api-button" onclick="saveAPIKey()">שמור מפתח</button>
-            </div>
-            <div class="api-status" id="apiStatus"></div>
-        </div>
-
-        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
-            <div class="upload-icon">📄</div>
-            <h2 class="upload-title">העלה מסמך</h2>
-            <p class="upload-subtitle">גרור קובץ לכאן או לחץ לבחירה</p>
-            <input type="file" id="fileInput" accept=".docx,.pdf,.txt" style="display: none;" onchange="handleFileUpload(event)">
-            <button class="upload-button">בחר קובץ</button>
-            <div style="margin-top: 20px; color: #7f8c8d; font-size: 0.9em;">
-                <small>תומך ב: Word (.docx), PDF, טקסט (.txt) - עד 16MB</small>
-            </div>
-        </div>
-
-        <div style="background: #f8f9fa; padding: 25px; border-radius: 15px; border-left: 4px solid #4285f4; margin-top: 30px; text-align: right;">
-            <h3>🤖 איך זה עובד?</h3>
-            <ul style="list-style: none; padding: 0;">
-                <li style="padding: 5px 0;">✅ Google Gemini AI מנתח את התוכן של המסמך שלך</li>
-                <li style="padding: 5px 0;">✅ מזהה סיכונים, אתגרים והזדמנויות באופן אוטומטי</li>
-                <li style="padding: 5px 0;">✅ מפה את המידע לתבנית דוח מקצועית</li>
-                <li style="padding: 5px 0;">✅ יוצר דוח מעוצב עם אפשרות עריכה והורדה</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Step 2: Processing -->
-    <div class="platform-container processing-container" id="processingStep">
-        <div style="text-align: center;">
-            <h2>מעבד את המסמך שלך...</h2>
-            <div class="file-info" id="fileInfo"></div>
-        </div>
-
-        <div style="margin: 30px 0;">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-
-            <div class="processing-steps">
-                <div class="step" id="step1">
-                    <div class="step-number">1</div>
-                    <div>קורא קובץ...</div>
-                </div>
-                <div class="step" id="step2">
-                    <div class="step-number">2</div>
-                    <div>מנתח עם AI...</div>
-                </div>
-                <div class="step" id="step3">
-                    <div class="step-number">3</div>
-                    <div>יוצר דוח...</div>
-                </div>
-                <div class="step" id="step4">
-                    <div class="step-number">4</div>
-                    <div>הדוח מוכן!</div>
-                </div>
-            </div>
-        </div>
-
-        <div style="background: #f8f9fa; padding: 25px; border-radius: 15px; border-left: 4px solid #4285f4; margin-top: 30px; text-align: right;">
-            <h3>🔍 מה קורה מאחורי הקלעים?</h3>
-            <ul style="list-style: none; padding: 0;">
-                <li style="padding: 5px 0;">🤖 Google Gemini AI מנתח את המסמך בעומק</li>
-                <li style="padding: 5px 0;">📊 זיהוי אוטומטי של סיכונים ודירוגם</li>
-                <li style="padding: 5px 0;">📋 מיפוי המידע לתבנית דוח מקצועית</li>
-                <li style="padding: 5px 0;">🎨 יצירת דוח מעוצב עם כל הפרטים</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Step 3: Report - EXACTLY MATCHING ORIGINAL -->
-    <div class="report-container" id="reportStep">
-        <div class="container">
-            <header class="header">
-                <h1 class="editable" id="reportTitle">דוח ניהול סיכונים מקיף</h1>
-                <div class="subtitle editable" id="reportSubtitle">פרויקט 720 - טרנספורמציה דיגיטלית ללמידה מותאמת אישית</div>
-                <div class="date-badge editable" id="reportBadge">משרד החינוך • מינהל חדשנות וטכנולוגיה • 2025</div>
-            </header>
-
-            <nav class="nav-menu">
-                <ul class="nav-links">
-                    <li><a href="#project" class="nav-link">📋 הגדרת הפרויקט</a></li>
-                    <li><a href="#risks" class="nav-link">⚠️ ניהול סיכונים</a></li>
-                    <li><a href="#strategies" class="nav-link">📈 תוכנית התמודדות</a></li>
-                    <li><a href="#innovation" class="nav-link">🚀 אסדרת חדשנות</a></li>
-                    <li><a href="#innovation-level" class="nav-link">📊 רמת החדשנות</a></li>
-                    <li><a href="#regulation-compliance" class="nav-link">✅ התאמה לדרישות אסדרה</a></li>
-                    <li><a href="#executive-summary-section" class="nav-link">📝 סיכום מנהלים והמלצות</a></li>
-                </ul>
-            </nav>
-
-            <section id="project" class="section">
-                <div class="section-header editable">📋 הגדרת הפרויקט</div>
-                
-                <div class="project-overview">
-                    <h2 style="text-align: center; color: #2c3e50; font-size: 2.2em; margin-bottom: 30px;" class="editable">פרטי הפרויקט</h2>
-                    <div class="overview-grid" id="projectOverview">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <div class="goals-section">
-                    <h3 class="editable">🎯 מטרות הפרויקט</h3>
-                    <div id="projectGoals">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <div class="goals-section">
-                    <h3 class="editable">📋 תוצרים מצופים</h3>
-                    <div id="projectDeliverables">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-            </section>
-
-            <section id="risks" class="section">
-                <div class="section-header editable">⚠️ ניהול סיכונים</div>
-                
-                <div class="risks-container">
-                    <div class="risk-summary" id="riskSummary">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                    <div class="risks-grid" id="risksGrid">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-            </section>
-
-            <section id="strategies" class="section">
-                <div class="section-header editable">📈 תוכנית התמודדות עם סיכונים</div>
-                <div class="strategies-section" id="strategiesSection">
-                    <!-- Will be populated by JavaScript -->
-                </div>
-            </section>
-
-            <section id="innovation" class="section">
-                <div class="section-header editable">🚀 אסדרת חדשנות</div>
-                <div class="risks-container">
-                    <p class="editable" style="text-align: center; font-size: 1.1em; margin-bottom: 25px;">
-                        הפרויקט נתפס כפרויקט חדשני בקנה מידה לאומי, המחייב בחינה מעמיקה של היבטים רגולטוריים ואסדרתיים כדי להבטיח את יישומו החלק והבטוח.
-                    </p>
-                    <div class="summary-box">
-                        <h3 style="text-align: center; color: #2c3e50; font-size: 1.8em; margin-bottom: 20px;" class="editable">הגדרת רמת החדשנות</h3>
-                        <p class="editable">
-                            הפרויקט כולל אלמנטים של ביג דאטה, למידת מכונה (AI) והתאמה אישית בקנה מידה רחב, המחייבים בחינה מעמיקה של היבטים רגולטוריים ואסדרתיים.
-                        </p>
-                        <div class="committee-recommendations">
-                            <h4><span class="icon">👥</span><span class="editable">המלצת ועדת המשנה לאסדרת חדשנות:</span></h4>
-                            <p class="editable">
-                                ועדת המשנה ממליצה לסווג את הפרויקט כ"<strong>חדשנות מהותית ורחבת היקף (Tier 1)</strong>". סיווג זה נובע מהפוטנציאל לשיבוש משמעותי במערכות הקיימות, היקף ההטמעה הארצי המתוכנן, והשימוש בטכנולוגיות מתקדמות בעלות השלכות רוחביות.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="innovation-level" class="section innovation-section">
-                <div class="section-header editable">📊 רמת החדשנות בפרויקט</div>
-                <p class="editable" style="font-size: 1.2em; max-width: 800px; margin: 20px auto 40px; color: rgba(255,255,255,0.9);">
-                    רמת החדשנות של הפרויקט נמדדה על פי מספר קריטריונים, המשקפים את מידת ההשפעה, המורכבות הטכנולוגית והשינוי שהפרויקט מביא למערכת.
-                </p>
-                <div class="innovation-score editable">8.5 / 10</div>
-                <div class="innovation-components">
-                    <div class="component-card">
-                        <div class="component-score editable">9.0</div>
-                        <div class="component-title editable">השפעה פדגוגית</div>
-                        <p class="editable">שינוי עמוק בתהליכי הוראה-למידה והתאמה אישית.</p>
-                    </div>
-                    <div class="component-card">
-                        <div class="component-score editable">8.8</div>
-                        <div class="component-title editable">מורכבות טכנולוגית</div>
-                        <p class="editable">שילוב AI, למידת מכונה, ביג דאטה ואוטומציה.</p>
-                    </div>
-                    <div class="component-card">
-                        <div class="component-score editable">8.2</div>
-                        <div class="component-title editable">שינוי ארגוני</div>
-                        <p class="editable">הטמעה רוחבית המשפיעה על כל רבדי המערכת.</p>
-                    </div>
-                    <div class="component-card">
-                        <div class="component-score editable">8.0</div>
-                        <div class="component-title editable">סיכון טכנולוגי</div>
-                        <p class="editable">פיתוח ואינטגרציה של פתרונות חדשים.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section id="regulation-compliance" class="section">
-                <div class="section-header editable">✅ התאמה לדרישות אסדרה</div>
-                <div class="regulation-section">
-                    <p class="editable" style="font-size: 1.1em; text-align: center; margin-bottom: 30px;">
-                        להלן פירוט ההתאמה של הפרויקט לדרישות האסדרה הרלוונטיות, וכן הפעולות הנדרשות להשלמת ההתאמה.
-                    </p>
-                    <div class="regulation-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th class="editable">דרישת אסדרה</th>
-                                    <th class="editable">תיאור</th>
-                                    <th class="editable">סטטוס התאמה</th>
-                                    <th class="editable">פעולות נדרשות</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="editable">אבטחת מידע וסייבר</td>
-                                    <td class="editable">הגנה על נתוני תלמידים ומורים מפני גישה בלתי מורשית.</td>
-                                    <td class="editable" style="color: #fbbc04; font-weight: bold;">בבדיקה מתקדמת</td>
-                                    <td class="editable">אישור סופי של ארכיטקטורת אבטחה.</td>
-                                </tr>
-                                <tr>
-                                    <td class="editable">פרטיות מידע (GDPR)</td>
-                                    <td class="editable">איסוף, אחסון ועיבוד נתונים בהתאם לרגולציה.</td>
-                                    <td class="editable" style="color: #ea4335; font-weight: bold;">דורש התייחסות</td>
-                                    <td class="editable">השלמת מסמך הערכת השפעה על פרטיות (PIA).</td>
-                                </tr>
-                                <tr>
-                                    <td class="editable">הנגשה לבעלי מוגבלויות</td>
-                                    <td class="editable">עמידה בתקני נגישות לווב (WCAG 2.1 AA).</td>
-                                    <td class="editable" style="color: #34a853; font-weight: bold;">בתהליך אישור</td>
-                                    <td class="editable">ביצוע סבב בדיקות נגישות אחרון.</td>
-                                </tr>
-                                <tr>
-                                    <td class="editable">הטיית אלגוריתמים (AI Ethics)</td>
-                                    <td class="editable">בחינה וצמצום הטיות אפשריות באלגוריתמי הלמידה.</td>
-                                    <td class="editable" style="color: #ea4335; font-weight: bold;">דורש התייחסות</td>
-                                    <td class="editable">הקמת ועדת אתיקה פנימית לבחינת האלגוריתמים.</td>
-                                </tr>
-                                <tr>
-                                    <td class="editable">הכשרת עובדי הוראה</td>
-                                    <td class="editable">עמידה בדרישות ההכשרה הפדגוגית והדיגיטלית.</td>
-                                    <td class="editable" style="color: #34a853; font-weight: bold;">הושלם</td>
-                                    <td class="editable">המשך ליווי ותמיכה פדגוגית שוטפת.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="executive-summary-section" class="section">
-                <div class="section-header editable">📝 סיכום מנהלים והמלצות</div>
-                <div class="risks-container">
-                    <div class="summary-box" style="margin-bottom: 40px;">
-                        <h3 style="text-align: center; color: #2c3e50; font-size: 1.8em; margin-bottom: 20px;" class="editable">סיכום מנהלים: הפרויקט במבט על</h3>
-                        <div id="executiveSummary" class="editable">
-                            <!-- Will be populated by JavaScript -->
-                        </div>
-                    </div>
-
-                    <div class="summary-box">
-                        <h3 style="text-align: center; color: #2c3e50; font-size: 1.8em; margin-bottom: 20px;" class="editable">המלצות מרכזיות</h3>
-                        <div id="recommendations">
-                            <!-- Will be populated by JavaScript -->
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <footer class="footer">
-                <p class="editable">© 2025 RiskReportAI - נוצר באמצעות בינה מלאכותית מתקדמת של Google Gemini AI.</p>
-            </footer>
-        </div>
-    </div>
-
-    <script>
-        // Global variables
-        let currentStep = 'upload', isEditing = false, uploadedFile = null, reportData = null;
-        let API_KEY = localStorage.getItem('gemini_api_key') || '';
-
-        // API Key Management
-        function checkAPIKey() {
-            if (API_KEY) {
-                document.getElementById('apiKeyInput').value = API_KEY;
-                document.getElementById('apiStatus').className = 'api-status success';
-                document.getElementById('apiStatus').textContent = '✅ מפתח API נשמר בהצלחה';
-                document.getElementById('uploadZone').classList.add('active');
-            } else {
-                document.getElementById('uploadZone').classList.remove('active');
-            }
-        }
-
-        function saveAPIKey() {
-            const apiKey = document.getElementById('apiKeyInput').value.trim();
-            if (!apiKey) {
-                document.getElementById('apiStatus').className = 'api-status error';
-                document.getElementById('apiStatus').textContent = '❌ נא להזין מפתח API';
-                return;
-            }
-
-            if (!apiKey.startsWith('AIza')) {
-                document.getElementById('apiStatus').className = 'api-status error';
-                document.getElementById('apiStatus').textContent = '❌ מפתח API לא תקין';
-                return;
-            }
-
-            API_KEY = apiKey;
-            localStorage.setItem('gemini_api_key', apiKey);
-            document.getElementById('apiStatus').className = 'api-status success';
-            document.getElementById('apiStatus').textContent = '✅ מפתח API נשמר בהצלחה!';
-            document.getElementById('uploadZone').classList.add('active');
-            
-            setTimeout(() => {
-                document.getElementById('apiStatus').style.display = 'none';
-            }, 3000);
-        }
-
-        // File handling
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            if (!API_KEY) {
-                showMessage('❌ נא להגדיר מפתח API לפני העלאת קובץ');
-                return;
-            }
-            
-            if (file.size > 16 * 1024 * 1024) {
-                showMessage('❌ קובץ גדול מדי. גודל מקסימלי: 16MB');
-                return;
-            }
-            
-            const allowedTypes = ['.docx', '.pdf', '.txt'];
-            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-            if (!allowedTypes.includes(fileExtension)) {
-                showMessage('❌ סוג קובץ לא נתמך. תומך ב: Word, PDF, TXT');
-                return;
-            }
-
-            uploadedFile = file;
-            processFile();
-        }
-
-        async function processFile() {
-            showProcessingStep();
-            document.getElementById('fileInfo').innerHTML = `<strong>קובץ:</strong> ${uploadedFile.name}<br><strong>גודל:</strong> ${(uploadedFile.size / 1024 / 1024).toFixed(2)} MB`;
-
-            try {
-                // Step 1: Read file
-                updateProcessingStep(1);
-                const fileContent = await readFileContent(uploadedFile);
-                
-                // Step 2: Analyze with Gemini
-                updateProcessingStep(2);
-                
-                const analysisPromise = analyzeWithGemini(fileContent);
-                const timeoutPromise = new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error('הבקשה לוקחת יותר מדי זמן. נסה שוב.')), 30000)
-                );
-                
-                const analysis = await Promise.race([analysisPromise, timeoutPromise]);
-                
-                // Step 3: Generate report
-                updateProcessingStep(3);
-                reportData = parseAnalysis(analysis);
-                
-                // Step 4: Complete
-                updateProcessingStep(4);
-                setTimeout(() => {
-                    populateDetailedReport();
-                    showReportStep();
-                }, 1500);
-                
-            } catch (error) {
-                console.error('Error processing file:', error);
-                
-                let errorMessage = 'שגיאה בעיבוד הקובץ';
-                if (error.message.includes('API key not valid')) {
-                    errorMessage = 'מפתח API לא תקין. בדוק את המפתח ונסה שוב.';
-                } else if (error.message.includes('timeout') || error.message.includes('יותר מדי זמן')) {
-                    errorMessage = 'הבקשה לוקחת יותר מדי זמן. נסה עם קובץ קטן יותר.';
-                } else if (error.message.includes('network')) {
-                    errorMessage = 'בעיית חיבור לאינטרנט. בדוק את החיבור ונסה שוב.';
-                } else {
-                    errorMessage += ': ' + error.message;
-                }
-                
-                showMessage('❌ ' + errorMessage);
-                showUploadStep();
-            }
-        }
-
-        async function readFileContent(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (e) => resolve(e.target.result);
-                reader.onerror = reject;
-                reader.readAsText(file);
-            });
-        }
-
-        async function analyzeWithGemini(content) {
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            const loadingStatus = document.getElementById('loadingStatus');
-            
-            loadingOverlay.classList.add('active');
-            loadingStatus.textContent = 'מתחבר ל-Google Gemini AI...';
-
-            const prompt = `אתה מומחה בניהול סיכונים וניתוח פרויקטים. קיבלת מסמך תפיסה/הצעה לפרויקט.
-
-משימתך: לנתח את המסמך וליצור דוח ניהול סיכונים מקיף בעברית.
-
-נתח את המסמך הבא וצור דוח מובנה בפורמט JSON עם המבנה הבא:
-
-{
-  "project": {
-    "name": "שם הפרויקט (חלץ מהמסמך)",
-    "manager": "מנהל הפרויקט או הגוף האחראי",
-    "organization": "הארגון/משרד/חברה",
-    "scope": "היקף הפרויקט (מקומי/ארצי/בינלאומי)",
-    "timeline": "לוח זמנים משוער",
-    "type": "סוג הפרויקט (טכנולוגי/תשתיתי/חינוכי וכו')",
-    "partners": "שותפים רלוונטיים"
-  },
-  "goals": [
-    {
-      "title": "כותרת המטרה",
-      "description": "תיאור מפורט של המטרה"
-    }
-  ],
-  "deliverables": [
-    "תוצר מצופה 1",
-    "תוצר מצופה 2"
-  ],
-  "risks": {
-    "summary": {
-      "very_high": 1,
-      "high": 2,
-      "medium": 2,
-      "low": 1
-    },
-    "list": [
-      {
-        "title": "כותרת הסיכון",
-        "severity": "very-high",
-        "probability": 8,
-        "impact": 9,
-        "score": 72,
-        "description": "תיאור מפורט של הסיכון",
-        "impacts": [
-          "השלכה אפשרית 1",
-          "השלכה אפשרית 2"
-        ],
-        "opportunities": [
-          "הזדמנות/פתרון אפשרי 1",
-          "הזדמנות/פתרון אפשרי 2"
-        ]
-      }
-    ]
-  },
-  "strategies": [
-    {
-      "title": "כותרת האסטרטגיה",
-      "description": "תיאור האסטרטגיה",
-      "details": [
-        {
-          "title": "פעולה מרכזית:",
-          "content": "תיאור הפעולה",
-          "timeline": "לוח זמנים"
-        }
-      ]
-    }
-  ],
-  "executiveSummary": "סיכום מנהלים מקיף (פסקה אחת ארוכה)",
-  "recommendations": [
-    "המלצה מפורטת 1",
-    "המלצה מפורטת 2"
-  ]
-}
-
-הנחיות חשובות:
-1. זהה לפחות 5 סיכונים משמעותיים
-2. כל סיכון חייב לכלול את כל השדות הנדרשים
-3. דרג את הסיכונים לפי חומרה: very-high, high, medium, low
-4. צור אסטרטגיות התמודדות מפורטות
-5. כתוב בעברית תקנית ומקצועית
-6. אם אין מידע מסוים במסמך, השתמש בהערכה מקצועית
-
-תוכן המסמך:
-${content}
-
-החזר רק את ה-JSON ללא הסברים נוספים.`;
-
-            try {
-                loadingStatus.textContent = 'שולח בקשה ל-Gemini AI...';
-                
-                console.log('Sending request to Gemini API...');
-                console.log('API Key:', API_KEY ? 'Set' : 'Not set');
-                
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: prompt
-                            }]
-                        }]
-                    })
-                });
-
-                loadingStatus.textContent = 'מעבד תשובה...';
-                console.log('Response status:', response.status);
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    console.error('API Error:', error);
-                    throw new Error(error.error?.message || `שגיאה בקריאה ל-API: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log('Response received:', data);
-                
-                const content = data.candidates[0].content.parts[0].text;
-                
-                loadingOverlay.classList.remove('active');
-                return content;
-                
-            } catch (error) {
-                loadingOverlay.classList.remove('active');
-                console.error('Full error:', error);
-                throw error;
-            }
-        }
-
-        function parseAnalysis(analysis) {
-            try {
-                // Clean the response - remove markdown code blocks if present
-                const cleanedAnalysis = analysis.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-                return JSON.parse(cleanedAnalysis);
-            } catch (error) {
-                console.error('Error parsing analysis:', error);
-                // Return default structure if parsing fails
-                return generateDefaultReport();
-            }
-        }
-
-        function generateDefaultReport() {
-            const projectName = uploadedFile.name.replace(/\.(docx|pdf|txt)$/i, '');
-            
-            return {
-                project: {
-                    name: projectName,
-                    manager: 'לא צוין',
-                    organization: 'הארגון שלך',
-                    scope: 'לא צוין',
-                    timeline: 'לא צוין',
-                    type: 'כללי',
-                    partners: 'לא צוינו'
-                },
-                goals: [
-                    { 
-                        title: 'מטרה ראשית', 
-                        description: 'השגת יעדי הפרויקט כפי שהוגדרו במסמך' 
-                    }
-                ],
-                deliverables: [
-                    'תוצר ראשי של הפרויקט',
-                    'דוחות והערכות',
-                    'תיעוד מלא'
-                ],
-                risks: {
-                    summary: { very_high: 1, high: 2, medium: 2, low: 1 },
-                    list: [
-                        {
-                            title: 'סיכון תקציבי',
-                            severity: 'high',
-                            probability: 7, 
-                            impact: 8, 
-                            score: 56,
-                            description: 'חריגה מהתקציב המתוכנן עלולה לפגוע ביכולת להשלים את הפרויקט.',
-                            impacts: [
-                                'עיכוב בלוחות זמנים',
-                                'צמצום היקף הפרויקט'
-                            ],
-                            opportunities: [
-                                'תכנון תקציבי מפורט מראש',
-                                'שמירת רזרבה תקציבית'
-                            ]
-                        }
-                    ]
-                },
-                strategies: [
-                    {
-                        title: 'אסטרטגיית ניהול סיכונים',
-                        description: 'פיתוח תוכנית מקיפה לזיהוי וניהול סיכונים לאורך חיי הפרויקט.',
-                        details: [
-                            {
-                                title: 'פעולה מרכזית:',
-                                content: 'הקמת צוות ניהול סיכונים',
-                                timeline: 'מיידי'
-                            }
-                        ]
-                    }
-                ],
-                executiveSummary: 'הפרויקט מציג אתגרים וסיכונים שונים הדורשים התייחסות. נדרשת תוכנית ניהול סיכונים מקיפה להבטחת הצלחת הפרויקט.',
-                recommendations: [
-                    'ביצוע סקר סיכונים מעמיק',
-                    'הקמת מנגנון מעקב ובקרה',
-                    'הגדרת תוכניות חירום'
-                ]
-            };
-        }
-
-        function updateProcessingStep(step) {
-            const steps = ['step1', 'step2', 'step3', 'step4'];
-            const progress = (step / 4) * 100;
-            
-            document.getElementById('progressFill').style.width = progress + '%';
-            
-            // Remove previous step states
-            steps.forEach((s, index) => {
-                const stepElement = document.getElementById(s);
-                stepElement.classList.remove('current');
-                if (index < step - 1) {
-                    stepElement.classList.add('active');
-                }
-            });
-            
-            // Set current step
-            if (step <= 4) {
-                document.getElementById(steps[step - 1]).classList.add('current');
-            }
-        }
-
-        function populateDetailedReport() {
-            // Update header
-            document.getElementById('reportTitle').textContent = 'דוח ניהול סיכונים מקיף';
-            document.getElementById('reportSubtitle').textContent = reportData.project.name;
-            document.getElementById('reportBadge').textContent = `${reportData.project.organization || 'הארגון שלך'} • ${new Date().toLocaleDateString('he-IL')}`;
-
-            // Project overview
-            document.getElementById('projectOverview').innerHTML = `
-                <div class="overview-card">
-                    <h4><span class="icon">👤</span>מנהל הפרויקט</h4>
-                    <p class="editable">${reportData.project.manager}</p>
-                </div>
-                <div class="overview-card">
-                    <h4><span class="icon">🏢</span>ארגון</h4>
-                    <p class="editable">${reportData.project.organization}</p>
-                </div>
-                <div class="overview-card">
-                    <h4><span class="icon">🌍</span>היקף הפרויקט</h4>
-                    <p class="editable">${reportData.project.scope}</p>
-                </div>
-                <div class="overview-card">
-                    <h4><span class="icon">📅</span>לוח זמנים</h4>
-                    <p class="editable">${reportData.project.timeline}</p>
-                </div>
-                <div class="overview-card">
-                    <h4><span class="icon">🚀</span>סוג הפרויקט</h4>
-                    <p class="editable">${reportData.project.type}</p>
-                </div>
-                <div class="overview-card">
-                    <h4><span class="icon">🤝</span>שותפים</h4>
-                    <p class="editable">${reportData.project.partners}</p>
-                </div>
-            `;
-
-            // Goals
-            document.getElementById('projectGoals').innerHTML = reportData.goals.map((goal, index) => `
-                <div class="goal-item editable">
-                    <strong>${index + 1}. ${goal.title}</strong><br>
-                    ${goal.description}
-                </div>
-            `).join('');
-
-            // Deliverables
-            document.getElementById('projectDeliverables').innerHTML = reportData.deliverables.map(deliverable => `
-                <div class="deliverable-item editable">
-                    <strong>${deliverable}</strong>
-                </div>
-            `).join('');
-
-            // Risk summary
-            document.getElementById('riskSummary').innerHTML = `
-                <div class="summary-card">
-                    <div class="summary-number very-high editable">${reportData.risks.summary.very_high}</div>
-                    <div class="editable">סיכונים בחומרה<br>גבוהה מאוד</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-number high editable">${reportData.risks.summary.high}</div>
-                    <div class="editable">סיכונים בחומרה<br>גבוהה</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-number medium editable">${reportData.risks.summary.medium}</div>
-                    <div class="editable">סיכונים בחומרה<br>בינונית</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-number low editable">${reportData.risks.summary.low}</div>
-                    <div class="editable">סיכונים בחומרה<br>נמוכה</div>
-                </div>
-            `;
-
-            // Risk cards
-            document.getElementById('risksGrid').innerHTML = reportData.risks.list.map(risk => `
-                <div class="risk-card risk-${risk.severity}">
-                    <div class="risk-header">
-                        <div class="risk-title editable">${risk.title}</div>
-                        <div class="risk-severity severity-${risk.severity} editable">חומרה ${getSeverityText(risk.severity)}</div>
-                    </div>
-                    <div class="risk-metrics">
-                        <div class="metric">
-                            <div class="metric-value editable">${risk.probability}</div>
-                            <div class="metric-label editable">הסתברות</div>
-                        </div>
-                        <div class="metric">
-                            <div class="metric-value editable">${risk.impact}</div>
-                            <div class="metric-label editable">עוצמת נזק</div>
-                        </div>
-                        <div class="metric">
-                            <div class="metric-value editable">${risk.score}</div>
-                            <div class="metric-label editable">דרגת חומרה</div>
-                        </div>
-                    </div>
-                    <div class="risk-description editable">${risk.description}</div>
-                    ${risk.impacts ? `
-                        <div class="risk-impact">
-                            <div class="impact-title editable">השלכות אפשריות:</div>
-                            <ul class="impact-list">
-                                ${risk.impacts.map(impact => `<li class="editable">${impact}</li>`).join('')}
-                            </ul>
-                        </div>
-                    ` : ''}
-                    ${risk.opportunities ? `
-                        <div class="risk-opportunity">
-                            <div class="opportunity-title editable">הזדמנויות:</div>
-                            <ul class="opportunity-list">
-                                ${risk.opportunities.map(opp => `<li class="editable">${opp}</li>`).join('')}
-                            </ul>
-                        </div>
-                    ` : ''}
-                </div>
-            `).join('');
-
-            // Strategies
-            document.getElementById('strategiesSection').innerHTML = reportData.strategies.map(strategy => `
-                <div class="strategy-card">
-                    <div class="strategy-header editable">${strategy.title}</div>
-                    <div class="strategy-content">
-                        <p class="editable">${strategy.description}</p>
-                        ${strategy.details ? `
-                            <div class="strategy-detail">
-                                ${strategy.details.map(detail => `
-                                    <div class="detail-item">
-                                        <h5>${detail.title}</h5>
-                                        <p class="editable">${detail.content}</p>
-                                        <span class="timeline-badge editable">לו"ז: ${detail.timeline}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>
-            `).join('');
-
-            // Executive summary
-            document.getElementById('executiveSummary').innerHTML = `<p class="editable">${reportData.executiveSummary}</p>`;
-
-            // Recommendations
-            document.getElementById('recommendations').innerHTML = `
-                <ul style="list-style: none; padding: 0; margin: 0;">
-                    ${reportData.recommendations.map((rec, index) => `
-                        <li class="editable" style="font-size: 1.1em; margin-bottom: 15px; background: #e6f7ff; padding: 15px; border-radius: 10px; border-right: 5px solid #4285f4;">
-                            <strong>${index + 1}. ${rec.split(':')[0]}:</strong> ${rec.split(':').slice(1).join(':').trim() || rec}
-                        </li>
-                    `).join('')}
-                </ul>
-            `;
-        }
-
-        function getSeverityText(severity) {
-            const severityMap = {
-                'very-high': 'גבוהה מאוד',
-                'high': 'גבוהה',
-                'medium': 'בינונית',
-                'low': 'נמוכה'
-            };
-            return severityMap[severity] || severity;
-        }
-
-        function showUploadStep() {
-            document.getElementById('uploadStep').style.display = 'block';
-            document.getElementById('processingStep').classList.remove('active');
-            document.getElementById('reportStep').classList.remove('active');
-            document.getElementById('controlButtons').style.display = 'none';
-            currentStep = 'upload';
-            document.getElementById('fileInput').value = '';
-            uploadedFile = null;
-            reportData = null;
-            
-            // Reset processing steps
-            const steps = ['step1', 'step2', 'step3', 'step4'];
-            steps.forEach(step => {
-                const stepElement = document.getElementById(step);
-                stepElement.classList.remove('active', 'current');
-            });
-            document.getElementById('progressFill').style.width = '0%';
-        }
-
-        function showProcessingStep() {
-            document.getElementById('uploadStep').style.display = 'none';
-            document.getElementById('processingStep').classList.add('active');
-            document.getElementById('reportStep').classList.remove('active');
-            document.getElementById('controlButtons').style.display = 'none';
-            currentStep = 'processing';
-        }
-
-        function showReportStep() {
-            document.getElementById('uploadStep').style.display = 'none';
-            document.getElementById('processingStep').classList.remove('active');
-            document.getElementById('reportStep').classList.add('active');
-            document.getElementById('controlButtons').style.display = 'flex';
-            currentStep = 'report';
-            showMessage('✅ הדוח הושלם בהצלחה! ניתן לערוך ולהוריד PDF');
-            
-            // Setup navigation
-            setupNavigation();
-        }
-
-        function toggleEdit() {
-            isEditing = !isEditing;
-            const editableElements = document.querySelectorAll('.editable');
-            const editButton = document.querySelector('.edit-toggle');
-
-            editableElements.forEach(el => { 
-                el.contentEditable = isEditing; 
-            });
-
-            if (isEditing) {
-                editButton.textContent = '💾 סיים עריכה';
-                editButton.classList.add('active');
-                showMessage('✅ מצב עריכה הופעל!');
-            } else {
-                editButton.textContent = '🎨 התחל עריכה';
-                editButton.classList.remove('active');
-                showMessage('✅ השינויים נשמרו!');
-            }
-        }
-
-        async function exportToPDF() {
-            const button = document.querySelector('.pdf-export');
-            if (button.classList.contains('exporting')) return;
-            
-            button.classList.add('exporting');
-            button.textContent = '⏳ מייצא...';
-            
-            try {
-                const wasEditing = isEditing;
-                if (wasEditing) {
-                    document.querySelectorAll('.editable').forEach(el => { 
-                        el.contentEditable = false; 
-                    });
-                }
-                
-                ['.control-buttons', '.success-message'].forEach(selector => {
-                    const el = document.querySelector(selector);
-                    if (el) el.style.display = 'none';
-                });
-                
-                const printCSS = `
-                    @media print {
-                        body { 
-                            -webkit-print-color-adjust: exact !important;
-                            color-adjust: exact !important;
-                            print-color-adjust: exact !important;
-                        }
-                        .control-buttons, .success-message { 
-                            display: none !important; 
-                        }
-                        .report-container { 
-                            max-width: none !important; 
-                            box-shadow: none !important; 
-                            border-radius: 0 !important; 
-                        }
-                        .section, .summary-box, .risk-card {
-                            page-break-inside: avoid;
-                            break-inside: avoid;
-                        }
-                        .nav-menu {
-                            position: static !important;
-                        }
-                    }
-                `;
-                
-                const style = document.createElement('style');
-                style.textContent = printCSS;
-                document.head.appendChild(style);
-                
-                setTimeout(() => {
-                    window.print();
-                    
-                    setTimeout(() => {
-                        document.head.removeChild(style);
-                        ['.control-buttons', '.success-message'].forEach(selector => {
-                            const el = document.querySelector(selector);
-                            if (el) el.style.display = '';
-                        });
-                        
-                        if (wasEditing) {
-                            document.querySelectorAll('.editable').forEach(el => { 
-                                el.contentEditable = true; 
-                            });
-                        }
-                        
-                        button.classList.remove('exporting');
-                        button.textContent = '📄 ייצוא ל-PDF';
-                        
-                        const filename = `דוח-ניהול-סיכונים-${reportData?.project?.name || 'פרויקט'}-${new Date().toISOString().slice(0, 10)}.pdf`;
-                        showMessage(`✅ ההדפסה הושלמה! בחר "שמור כ-PDF" בדפדפן\nשם קובץ מוצע: ${filename}`);
-                    }, 1000);
-                }, 500);
-                
-            } catch (error) {
-                console.error('Export failed:', error);
-                button.classList.remove('exporting');
-                button.textContent = '📄 ייצוא ל-PDF';
-                showMessage('❌ שגיאה בייצוא. נסה שוב.');
-            }
-        }
-
-        function showMessage(msg) {
-            const successMessage = document.getElementById('successMessage');
-            successMessage.textContent = msg;
-            successMessage.classList.add('show');
-            setTimeout(() => { 
-                successMessage.classList.remove('show'); 
-            }, 5000);
-        }
-
-        function setupNavigation() {
-            const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.nav-link');
-
-            window.addEventListener('scroll', () => {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= sectionTop - 100) { 
-                        current = section.getAttribute('id');
-                    }
-                });
-
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.href.includes(current)) {
-                        link.classList.add('active');
-                    }
-                });
-            });
-        }
-
-        // Drag and drop
-        function setupDragAndDrop() {
-            const uploadZone = document.getElementById('uploadZone');
-            
-            uploadZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadZone.classList.add('dragover');
-            });
-
-            uploadZone.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                uploadZone.classList.remove('dragover');
-            });
-
-            uploadZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadZone.classList.remove('dragover');
-                
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    document.getElementById('fileInput').files = files;
-                    handleFileUpload({ target: { files: files } });
-                }
-            });
-        }
-
-        // Initialize
-        function init() {
-            setupDragAndDrop();
-            checkAPIKey();
-            showUploadStep();
-            console.log('🤖 RiskReportAI - מחולל דוחות ניהול סיכונים חכם (Powered by Gemini) הופעל בהצלחה!');
-        }
-
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
-</body>
-</html>
+                margin-bottom: 20px
