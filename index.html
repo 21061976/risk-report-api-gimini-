@@ -1316,6 +1316,8 @@
 
         html { scroll-behavior: smooth; }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 </head>
 <body>
     <div class="loading-overlay" id="loadingOverlay">
@@ -1368,9 +1370,9 @@
             <h3>🤖 איך זה עובד?</h3>
             <ul style="list-style: none; padding: 0;">
                 <li style="padding: 5px 0;">✅ Google Gemini AI מנתח את התוכן של המסמך שלך</li>
-                <li style="padding: 5px 0;">✅ מזהה סיכונים, אתגרים והזדמנויות באופן אוטומטי</li>
-                <li style="padding: 5px 0;">✅ מפה את המידע לתבנית דוח מקצועית</li>
-                <li style="padding: 5px 0;">✅ יוצר דוח מעוצב עם אפשרות עריכה והורדה</li>
+                <li style="padding: 5px 0;">✅ מזהה סיכונים על בסיס המטרות שהוגדרו</li>
+                <li style="padding: 5px 0;">✅ יוצר המלצות המבוססות על הסיכונים והמטרות</li>
+                <li style="padding: 5px 0;">✅ מייצר דוח מקצועי עם אפשרות עריכה והורדה</li>
             </ul>
         </div>
     </div>
@@ -1411,9 +1413,9 @@
             <h3>🔍 מה קורה מאחורי הקלעים?</h3>
             <ul style="list-style: none; padding: 0;">
                 <li style="padding: 5px 0;">🤖 Google Gemini AI מנתח את המסמך בעומק</li>
-                <li style="padding: 5px 0;">📊 זיהוי אוטומטי של סיכונים ודירוגם</li>
-                <li style="padding: 5px 0;">📋 מיפוי המידע לתבנית דוח מקצועית</li>
-                <li style="padding: 5px 0;">🎨 יצירת דוח מעוצב עם כל הפרטים</li>
+                <li style="padding: 5px 0;">📊 זיהוי אוטומטי של מטרות וסיכונים</li>
+                <li style="padding: 5px 0;">🔗 קישור סיכונים למטרות הפרויקט</li>
+                <li style="padding: 5px 0;">📋 יצירת המלצות מבוססות סיכונים</li>
             </ul>
         </div>
     </div>
@@ -1423,8 +1425,8 @@
         <div class="container">
             <header class="header">
                 <h1 class="editable" id="reportTitle">דוח ניהול סיכונים מקיף</h1>
-                <div class="subtitle editable" id="reportSubtitle">פרויקט 720 - טרנספורמציה דיגיטלית ללמידה מותאמת אישית</div>
-                <div class="date-badge editable" id="reportBadge">משרד החינוך • מינהל חדשנות וטכנולוגיה • 2025</div>
+                <div class="subtitle editable" id="reportSubtitle">שם הפרויקט</div>
+                <div class="date-badge editable" id="reportBadge">משרד החינוך • 2025</div>
             </header>
 
             <nav class="nav-menu">
@@ -1487,18 +1489,18 @@
             <section id="innovation" class="section">
                 <div class="section-header editable">🚀 אסדרת חדשנות</div>
                 <div class="risks-container">
-                    <p class="editable" style="text-align: center; font-size: 1.1em; margin-bottom: 25px;">
+                    <p class="editable" style="text-align: center; font-size: 1.1em; margin-bottom: 25px;" id="innovationDescription">
                         הפרויקט נתפס כפרויקט חדשני בקנה מידה לאומי, המחייב בחינה מעמיקה של היבטים רגולטוריים ואסדרתיים כדי להבטיח את יישומו החלק והבטוח.
                     </p>
                     <div class="summary-box">
                         <h3 style="text-align: center; color: #2c3e50; font-size: 1.8em; margin-bottom: 20px;" class="editable">הגדרת רמת החדשנות</h3>
-                        <p class="editable">
-                            הפרויקט כולל אלמנטים של ביג דאטה, למידת מכונה (AI) והתאמה אישית בקנה מידה רחב, המחייבים בחינה מעמיקה של היבטים רגולטוריים ואסדרתיים.
+                        <p class="editable" id="innovationDefinition">
+                            הפרויקט כולל אלמנטים חדשניים המחייבים בחינה מעמיקה של היבטים רגולטוריים ואסדרתיים.
                         </p>
                         <div class="committee-recommendations">
                             <h4><span class="icon">👥</span><span class="editable">המלצת ועדת המשנה לאסדרת חדשנות:</span></h4>
-                            <p class="editable">
-                                ועדת המשנה ממליצה לסווג את הפרויקט כ"<strong>חדשנות מהותית ורחבת היקף (Tier 1)</strong>". סיווג זה נובע מהפוטנציאל לשיבוש משמעותי במערכות הקיימות, היקף ההטמעה הארצי המתוכנן, והשימוש בטכנולוגיות מתקדמות בעלות השלכות רוחביות.
+                            <p class="editable" id="committeeRecommendation">
+                                ועדת המשנה ממליצה על אישור הפרויקט תוך הקפדה על עמידה בתנאי האסדרה המוגדרים.
                             </p>
                         </div>
                     </div>
@@ -1510,28 +1512,9 @@
                 <p class="editable" style="font-size: 1.2em; max-width: 800px; margin: 20px auto 40px; color: rgba(255,255,255,0.9);">
                     רמת החדשנות של הפרויקט נמדדה על פי מספר קריטריונים, המשקפים את מידת ההשפעה, המורכבות הטכנולוגית והשינוי שהפרויקט מביא למערכת.
                 </p>
-                <div class="innovation-score editable">8.5 / 10</div>
-                <div class="innovation-components">
-                    <div class="component-card">
-                        <div class="component-score editable">9.0</div>
-                        <div class="component-title editable">השפעה פדגוגית</div>
-                        <p class="editable">שינוי עמוק בתהליכי הוראה-למידה והתאמה אישית.</p>
-                    </div>
-                    <div class="component-card">
-                        <div class="component-score editable">8.8</div>
-                        <div class="component-title editable">מורכבות טכנולוגית</div>
-                        <p class="editable">שילוב AI, למידת מכונה, ביג דאטה ואוטומציה.</p>
-                    </div>
-                    <div class="component-card">
-                        <div class="component-score editable">8.2</div>
-                        <div class="component-title editable">שינוי ארגוני</div>
-                        <p class="editable">הטמעה רוחבית המשפיעה על כל רבדי המערכת.</p>
-                    </div>
-                    <div class="component-card">
-                        <div class="component-score editable">8.0</div>
-                        <div class="component-title editable">סיכון טכנולוגי</div>
-                        <p class="editable">פיתוח ואינטגרציה של פתרונות חדשים.</p>
-                    </div>
+                <div class="innovation-score editable" id="innovationScore">8.5 / 10</div>
+                <div class="innovation-components" id="innovationComponents">
+                    <!-- Will be populated by JavaScript -->
                 </div>
             </section>
 
@@ -1551,37 +1534,8 @@
                                     <th class="editable">פעולות נדרשות</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="editable">אבטחת מידע וסייבר</td>
-                                    <td class="editable">הגנה על נתוני תלמידים ומורים מפני גישה בלתי מורשית.</td>
-                                    <td class="editable" style="color: #fbbc04; font-weight: bold;">בבדיקה מתקדמת</td>
-                                    <td class="editable">אישור סופי של ארכיטקטורת אבטחה.</td>
-                                </tr>
-                                <tr>
-                                    <td class="editable">פרטיות מידע (GDPR)</td>
-                                    <td class="editable">איסוף, אחסון ועיבוד נתונים בהתאם לרגולציה.</td>
-                                    <td class="editable" style="color: #ea4335; font-weight: bold;">דורש התייחסות</td>
-                                    <td class="editable">השלמת מסמך הערכת השפעה על פרטיות (PIA).</td>
-                                </tr>
-                                <tr>
-                                    <td class="editable">הנגשה לבעלי מוגבלויות</td>
-                                    <td class="editable">עמידה בתקני נגישות לווב (WCAG 2.1 AA).</td>
-                                    <td class="editable" style="color: #34a853; font-weight: bold;">בתהליך אישור</td>
-                                    <td class="editable">ביצוע סבב בדיקות נגישות אחרון.</td>
-                                </tr>
-                                <tr>
-                                    <td class="editable">הטיית אלגוריתמים (AI Ethics)</td>
-                                    <td class="editable">בחינה וצמצום הטיות אפשריות באלגוריתמי הלמידה.</td>
-                                    <td class="editable" style="color: #ea4335; font-weight: bold;">דורש התייחסות</td>
-                                    <td class="editable">הקמת ועדת אתיקה פנימית לבחינת האלגוריתמים.</td>
-                                </tr>
-                                <tr>
-                                    <td class="editable">הכשרת עובדי הוראה</td>
-                                    <td class="editable">עמידה בדרישות ההכשרה הפדגוגית והדיגיטלית.</td>
-                                    <td class="editable" style="color: #34a853; font-weight: bold;">הושלם</td>
-                                    <td class="editable">תיעוד ומעקב אחר השלמת ההכשרות.</td>
-                                </tr>
+                            <tbody id="regulationTableBody">
+                                <!-- Will be populated by JavaScript -->
                             </tbody>
                         </table>
                     </div>
@@ -1593,43 +1547,15 @@
                 <div class="risks-container">
                     <div class="summary-box">
                         <h3 style="text-align: center; color: #2c3e50; font-size: 1.8em; margin-bottom: 25px;" class="editable">סיכום מנהלים</h3>
-                        <p class="editable">
-                            פרויקט הטרנספורמציה הדיגיטלית ללמידה מותאמת אישית מהווה יוזמה אסטרטגית משמעותית במערכת החינוך. הפרויקט שואף לשנות את פני החינוך בישראל באמצעות טכנולוגיות מתקדמות של בינה מלאכותית ולמידת מכונה.
-                        </p>
-                        <p class="editable">
-                            <strong>נקודות חוזק מרכזיות:</strong> חזון ברור ומהפכני, תמיכה ארגונית רחבה, פוטנציאל השפעה עצום על מערכת החינוך.
-                        </p>
-                        <p class="editable">
-                            <strong>אתגרים מרכזיים:</strong> מורכבות טכנולוגית גבוהה, התנגדות אפשרית לשינוי, דרישות רגולטוריות מחמירות, צורך בהשקעה משמעותית במשאבים.
-                        </p>
-                        <p class="editable">
-                            <strong>סטטוס נוכחי:</strong> הפרויקט נמצא בשלב התכנון המתקדם, עם התקדמות משמעותית בהגדרת הארכיטקטורה הטכנולוגית והמודל הפדגוגי. נדרשת השלמת מספר אבני דרך רגולטוריות לפני תחילת הפיילוט.
+                        <p class="editable" id="executiveSummary">
+                            סיכום מנהלים יופיע כאן
                         </p>
                     </div>
 
                     <div class="summary-box" id="recommendations">
                         <h3 style="text-align: center; color: #2c3e50; font-size: 1.8em; margin-bottom: 25px;" class="editable">המלצות הוועדה</h3>
-                        <ul style="list-style: none; padding: 0;">
-                            <li style="background: #e8f5e9; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 4px solid #4caf50;">
-                                <strong class="editable">1. אישור להמשך הפרויקט:</strong>
-                                <span class="editable">מומלץ לאשר את המשך הפרויקט תוך הקפדה על עמידה בתוכנית ניהול הסיכונים המוצעת.</span>
-                            </li>
-                            <li style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 4px solid #2196f3;">
-                                <strong class="editable">2. הקמת ועדת היגוי ייעודית:</strong>
-                                <span class="editable">להקים ועדת היגוי בהשתתפות נציגי הרגולטור, מומחי טכנולוגיה, אנשי חינוך ונציגי הורים.</span>
-                            </li>
-                            <li style="background: #fff3e0; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 4px solid #ff9800;">
-                                <strong class="editable">3. ביצוע פיילוט מבוקר:</strong>
-                                <span class="editable">להתחיל בפיילוט מצומצם ב-10 בתי ספר לתקופה של 6 חודשים לפני הרחבה ארצית.</span>
-                            </li>
-                            <li style="background: #fce4ec; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 4px solid #e91e63;">
-                                <strong class="editable">4. תקצוב ייעודי:</strong>
-                                <span class="editable">להקצות תקציב ייעודי של 50 מיליון ש"ח לשלב הפיילוט והערכות הראשונית.</span>
-                            </li>
-                            <li style="background: #f3e5f5; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 4px solid #9c27b0;">
-                                <strong class="editable">5. מעקב ובקרה רציפים:</strong>
-                                <span class="editable">לקבוע מנגנון דיווח חודשי לוועדת ההיגוי ודיווח רבעוני להנהלת המשרד.</span>
-                            </li>
+                        <ul style="list-style: none; padding: 0;" id="recommendationsList">
+                            <!-- Will be populated by JavaScript -->
                         </ul>
                     </div>
 
@@ -1644,6 +1570,9 @@
 
             <footer class="footer">
                 <p class="editable">© 2025 RiskReportAI - מערכת לניהול סיכונים בפרויקטים | Powered by Google Gemini AI</p>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #34495e; font-size: 0.8em; opacity: 0.8;">
+                    <p class="editable"><strong>פיתוח ועיצוב מוצר:</strong> ד"ר אסף אוזן</p>
+                </div>
             </footer>
         </div>
     </div>
@@ -1654,6 +1583,9 @@
         let apiKey = '';
         let reportData = null;
         let isEditMode = false;
+
+        // Load PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
 
         // Check for saved API key
         window.onload = function() {
@@ -1698,699 +1630,3 @@
         const uploadZone = document.getElementById('uploadZone');
         
         uploadZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadZone.classList.add('dragover');
-        });
-        
-        uploadZone.addEventListener('dragleave', () => {
-            uploadZone.classList.remove('dragover');
-        });
-        
-        uploadZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadZone.classList.remove('dragover');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handleFile(files[0]);
-            }
-        });
-
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                handleFile(file);
-            }
-        }
-
-        async function handleFile(file) {
-            if (!apiKey) {
-                showApiStatus('error', 'נא להגדיר מפתח API תחילה');
-                return;
-            }
-
-            const validTypes = ['.docx', '.pdf', '.txt'];
-            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-            
-            if (!validTypes.includes(fileExtension)) {
-                alert('נא לבחור קובץ Word, PDF או טקסט');
-                return;
-            }
-            
-            if (file.size > 16 * 1024 * 1024) {
-                alert('הקובץ גדול מדי. מקסימום 16MB');
-                return;
-            }
-            
-            await processFile(file);
-        }
-
-        async function processFile(file) {
-            // Show processing UI
-            document.getElementById('uploadStep').style.display = 'none';
-            document.getElementById('processingStep').classList.add('active');
-            
-            // Show file info
-            document.getElementById('fileInfo').innerHTML = `
-                <strong>קובץ:</strong> ${file.name}<br>
-                <strong>גודל:</strong> ${(file.size / 1024 / 1024).toFixed(2)} MB<br>
-                <strong>סוג:</strong> ${file.type || 'לא ידוע'}
-            `;
-            
-            // Simulate processing steps
-            await simulateProcessing();
-            
-            // Extract text from file
-            const text = await extractTextFromFile(file);
-            
-            if (!text) {
-                alert('לא ניתן לקרוא את הקובץ');
-                showUploadStep();
-                return;
-            }
-            
-            // Analyze with Gemini
-            await analyzeWithGemini(text);
-        }
-
-        async function simulateProcessing() {
-            const steps = ['step1', 'step2', 'step3', 'step4'];
-            const progressFill = document.getElementById('progressFill');
-            
-            for (let i = 0; i < steps.length; i++) {
-                const step = document.getElementById(steps[i]);
-                step.classList.add('active');
-                
-                if (i > 0) {
-                    document.getElementById(steps[i-1]).classList.remove('current');
-                }
-                
-                step.classList.add('current');
-                progressFill.style.width = ((i + 1) / steps.length * 100) + '%';
-                
-                // Update loading status
-                const statusMessages = [
-                    'קורא את הקובץ...',
-                    'מנתח עם Google Gemini AI...',
-                    'יוצר דוח מפורט...',
-                    'הדוח מוכן!'
-                ];
-                document.getElementById('loadingStatus').textContent = statusMessages[i];
-                
-                if (i < steps.length - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-                }
-            }
-        }
-
-        async function extractTextFromFile(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    const content = e.target.result;
-                    
-                    if (file.name.endsWith('.txt')) {
-                        resolve(content);
-                    } else if (file.name.endsWith('.pdf')) {
-                        // For demo purposes, we'll use a sample text
-                        resolve(getSampleText());
-                    } else if (file.name.endsWith('.docx')) {
-                        // For demo purposes, we'll use a sample text
-                        resolve(getSampleText());
-                    } else {
-                        resolve(null);
-                    }
-                };
-                
-                reader.onerror = function() {
-                    resolve(null);
-                };
-                
-                reader.readAsText(file);
-            });
-        }
-
-        function getSampleText() {
-            return `
-                פרויקט 720 - טרנספורמציה דיגיטלית ללמידה מותאמת אישית
-                
-                משרד החינוך - מינהל חדשנות וטכנולוגיה
-                
-                תיאור הפרויקט:
-                הפרויקט שואף ליצור מהפכה במערכת החינוך באמצעות פיתוח פלטפורמה דיגיטלית מתקדמת המבוססת על בינה מלאכותית ולמידת מכונה. הפלטפורמה תאפשר התאמה אישית של תהליכי הלמידה לכל תלמיד על פי יכולותיו, קצב הלמידה שלו ותחומי העניין האישיים.
-                
-                מטרות הפרויקט:
-                1. יצירת סביבת למידה דיגיטלית אדפטיבית
-                2. שיפור הישגי התלמידים באמצעות למידה מותאמת אישית
-                3. הפחתת פערים לימודיים בין תלמידים
-                4. פיתוח כלים למורים לניטור ומעקב אחר התקדמות התלמידים
-                
-                אתגרים וסיכונים:
-                - מורכבות טכנולוגית גבוהה בפיתוח מערכת AI
-                - התנגדות אפשרית של מורים לשינוי
-                - דרישות אבטחת מידע ופרטיות מחמירות
-                - עלויות פיתוח והטמעה גבוהות
-                - צורך בהכשרה מקיפה של צוותי הוראה
-            `;
-        }
-
-        async function analyzeWithGemini(text) {
-            // Show loading overlay
-            document.getElementById('loadingOverlay').classList.add('active');
-            
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: `נתח את המסמך הבא וחלץ ממנו מידע ליצירת דוח ניהול סיכונים. 
-                                זהה סיכונים, אתגרים, הזדמנויות ומידע רלוונטי אחר.
-                                
-                                המסמך:
-                                ${text}
-                                
-                                החזר תשובה בפורמט JSON עם המבנה הבא:
-                                {
-                                    "projectName": "שם הפרויקט",
-                                    "organization": "שם הארגון",
-                                    "projectDetails": {
-                                        "budget": "תקציב",
-                                        "timeline": "לוח זמנים",
-                                        "scope": "היקף",
-                                        "team": "צוות"
-                                    },
-                                    "goals": ["מטרה 1", "מטרה 2"],
-                                    "deliverables": ["תוצר 1", "תוצר 2"],
-                                    "risks": [
-                                        {
-                                            "title": "כותרת הסיכון",
-                                            "severity": "גבוה/בינוני/נמוך",
-                                            "probability": 1-10,
-                                            "impact": 1-10,
-                                            "description": "תיאור",
-                                            "mitigation": "אסטרטגיה להתמודדות"
-                                        }
-                                    ]
-                                }`
-                            }]
-                        }]
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Gemini API error');
-                }
-
-                const data = await response.json();
-                const generatedText = data.candidates[0].content.parts[0].text;
-                
-                // Try to parse as JSON
-                try {
-                    const jsonMatch = generatedText.match(/\{[\s\S]*\}/);
-                    if (jsonMatch) {
-                        reportData = JSON.parse(jsonMatch[0]);
-                    } else {
-                        throw new Error('No JSON found');
-                    }
-                } catch (e) {
-                    // Use default data if parsing fails
-                    reportData = getDefaultReportData();
-                }
-                
-                // Generate report
-                generateReport(reportData);
-                
-            } catch (error) {
-                console.error('Gemini API Error:', error);
-                // Use sample data for demo
-                reportData = getDefaultReportData();
-                generateReport(reportData);
-            } finally {
-                document.getElementById('loadingOverlay').classList.remove('active');
-            }
-        }
-
-        function getDefaultReportData() {
-            return {
-                projectName: "פרויקט 720 - טרנספורמציה דיגיטלית ללמידה מותאמת אישית",
-                organization: "משרד החינוך - מינהל חדשנות וטכנולוגיה",
-                projectDetails: {
-                    budget: "120 מיליון ש״ח",
-                    timeline: "36 חודשים",
-                    scope: "כלל מערכת החינוך - 4,800 בתי ספר",
-                    team: "150 אנשי צוות"
-                },
-                goals: [
-                    "יצירת פלטפורמה דיגיטלית אדפטיבית ללמידה מותאמת אישית",
-                    "שיפור הישגי הלמידה ב-25% תוך 3 שנים",
-                    "הפחתת פערים לימודיים בין תלמידים ב-30%",
-                    "פיתוח כלי ניטור ומעקב מתקדמים למורים"
-                ],
-                deliverables: [
-                    "פלטפורמת למידה דיגיטלית מבוססת AI",
-                    "מערכת ניהול תוכן לימודי אדפטיבית",
-                    "לוח בקרה למורים ומנהלים",
-                    "אפליקציה לתלמידים והורים"
-                ],
-                risks: [
-                    {
-                        title: "מורכבות טכנולוגית בפיתוח מערכת AI",
-                        severity: "גבוה מאוד",
-                        probability: 8,
-                        impact: 9,
-                        risk: 72,
-                        description: "פיתוח אלגוריתמים של למידת מכונה להתאמה אישית דורש מומחיות גבוהה וזמן פיתוח ארוך.",
-                        impacts: [
-                            "עיכוב בלוחות הזמנים של הפרויקט",
-                            "חריגה מהתקציב המתוכנן",
-                            "אי עמידה בדרישות הפונקציונליות"
-                        ],
-                        opportunities: [
-                            "שיתוף פעולה עם אוניברסיטאות מובילות",
-                            "גיוס מומחי AI בינלאומיים",
-                            "שימוש בטכנולוגיות קוד פתוח"
-                        ]
-                    },
-                    {
-                        title: "התנגדות צוותי הוראה לשינוי",
-                        severity: "גבוה",
-                        probability: 7,
-                        impact: 8,
-                        risk: 56,
-                        description: "מורים עלולים לחשוש מאיבוד מקום עבודה או משינוי דרסטי בשיטות ההוראה.",
-                        impacts: [
-                            "התנגדות אקטיבית להטמעת המערכת",
-                            "שימוש חלקי בלבד ביכולות המערכת",
-                            "פגיעה במוטיבציה של הצוות החינוכי"
-                        ],
-                        opportunities: [
-                            "הכשרות מקיפות ותמיכה רציפה",
-                            "תמריצים למורים מובילים",
-                            "שיתוף המורים בתהליך הפיתוח"
-                        ]
-                    },
-                    {
-                        title: "אתגרי אבטחת מידע ופרטיות",
-                        severity: "גבוה מאוד",
-                        probability: 6,
-                        impact: 10,
-                        risk: 60,
-                        description: "המערכת תכיל מידע רגיש על מיליוני תלמידים, מה שמציב אתגרי אבטחה משמעותיים.",
-                        impacts: [
-                            "סיכון לדליפת מידע רגיש",
-                            "תביעות משפטיות אפשריות",
-                            "פגיעה באמון הציבור"
-                        ],
-                        opportunities: [
-                            "הטמעת תקני אבטחה מתקדמים",
-                            "שיתוף פעולה עם מערך הסייבר הלאומי",
-                            "פיתוח מודל אבטחה חדשני לחינוך"
-                        ]
-                    },
-                    {
-                        title: "תקציב ומשאבים מוגבלים",
-                        severity: "בינוני",
-                        probability: 6,
-                        impact: 7,
-                        risk: 42,
-                        description: "קיצוצים תקציביים אפשריים עלולים להשפיע על היקף הפרויקט.",
-                        impacts: [
-                            "צמצום היקף הפרויקט",
-                            "דחיית שלבי הטמעה",
-                            "ויתור על פיצ'רים חשובים"
-                        ],
-                        opportunities: [
-                            "גיוס תרומות ממגזר פרטי",
-                            "שותפויות אסטרטגיות עם חברות טכנולוגיה",
-                            "מודל הטמעה מדורג וחסכוני"
-                        ]
-                    }
-                ]
-            };
-        }
-
-        function generateReport(data) {
-            // Update header
-            document.getElementById('reportTitle').textContent = 'דוח ניהול סיכונים מקיף';
-            document.getElementById('reportSubtitle').textContent = data.projectName;
-            document.getElementById('reportBadge').textContent = `${data.organization} • ${new Date().getFullYear()}`;
-            
-            // Update project overview
-            const overviewGrid = document.getElementById('projectOverview');
-            overviewGrid.innerHTML = `
-                <div class="overview-card">
-                    <h4><span class="icon">💰</span>תקציב הפרויקט</h4>
-                    <p class="editable">${data.projectDetails.budget}</p>
-                </div>
-                <div class="overview-card">
-                    <h4><span class="icon">📅</span>לוח זמנים</h4>
-                    <p class="editable">${data.projectDetails.timeline}</p>
-                </div>
-                <div class="overview-card">
-                    <h4><span class="icon">🎯</span>היקף הפרויקט</h4>
-                    <p class="editable">${data.projectDetails.scope}</p>
-                </div>
-                <div class="overview-card">
-                    <h4><span class="icon">👥</span>צוות הפרויקט</h4>
-                    <p class="editable">${data.projectDetails.team}</p>
-                </div>
-            `;
-            
-            // Update goals
-            const goalsDiv = document.getElementById('projectGoals');
-            goalsDiv.innerHTML = data.goals.map(goal => 
-                `<div class="goal-item editable">${goal}</div>`
-            ).join('');
-            
-            // Update deliverables
-            const deliverablesDiv = document.getElementById('projectDeliverables');
-            deliverablesDiv.innerHTML = data.deliverables.map(deliverable => 
-                `<div class="deliverable-item editable">${deliverable}</div>`
-            ).join('');
-            
-            // Update risk summary
-            const riskCounts = {
-                'גבוה מאוד': 0,
-                'גבוה': 0,
-                'בינוני': 0,
-                'נמוך': 0
-            };
-            
-            data.risks.forEach(risk => {
-                riskCounts[risk.severity] = (riskCounts[risk.severity] || 0) + 1;
-            });
-            
-            const summaryDiv = document.getElementById('riskSummary');
-            summaryDiv.innerHTML = `
-                <div class="summary-card">
-                    <div class="summary-number very-high">${riskCounts['גבוה מאוד']}</div>
-                    <div>סיכונים גבוהים מאוד</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-number high">${riskCounts['גבוה']}</div>
-                    <div>סיכונים גבוהים</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-number medium">${riskCounts['בינוני']}</div>
-                    <div>סיכונים בינוניים</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-number low">${riskCounts['נמוך']}</div>
-                    <div>סיכונים נמוכים</div>
-                </div>
-            `;
-            
-            // Update risks grid
-            const risksGrid = document.getElementById('risksGrid');
-            risksGrid.innerHTML = data.risks.map(risk => {
-                const severityClass = {
-                    'גבוה מאוד': 'risk-very-high',
-                    'גבוה': 'risk-high',
-                    'בינוני': 'risk-medium',
-                    'נמוך': 'risk-low'
-                }[risk.severity] || 'risk-medium';
-                
-                const severityBadgeClass = {
-                    'גבוה מאוד': 'severity-very-high',
-                    'גבוה': 'severity-high',
-                    'בינוני': 'severity-medium',
-                    'נמוך': 'severity-low'
-                }[risk.severity] || 'severity-medium';
-                
-                return `
-                    <div class="risk-card ${severityClass}">
-                        <div class="risk-header">
-                            <h3 class="risk-title editable">${risk.title}</h3>
-                            <span class="risk-severity ${severityBadgeClass} editable">${risk.severity}</span>
-                        </div>
-                        <div class="risk-metrics">
-                            <div class="metric">
-                                <div class="metric-value editable">${risk.probability}</div>
-                                <div class="metric-label">סבירות</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value editable">${risk.impact}</div>
-                                <div class="metric-label">השפעה</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value editable">${risk.risk}</div>
-                                <div class="metric-label">ציון סיכון</div>
-                            </div>
-                        </div>
-                        <div class="risk-description editable">${risk.description}</div>
-                        ${risk.impacts ? `
-                            <div class="risk-impact">
-                                <div class="impact-title">השפעות אפשריות:</div>
-                                <ul class="impact-list">
-                                    ${risk.impacts.map(impact => `<li class="editable">${impact}</li>`).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-                        ${risk.opportunities ? `
-                            <div>
-                                <div class="opportunity-title">הזדמנויות:</div>
-                                <ul class="opportunity-list">
-                                    ${risk.opportunities.map(opp => `<li class="editable">${opp}</li>`).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
-            }).join('');
-            
-            // Generate strategies
-            generateStrategies(data.risks);
-            
-            // Update report date
-            const today = new Date();
-            const monthNames = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
-            document.getElementById('reportDate').textContent = `${monthNames[today.getMonth()]} ${today.getFullYear()}`;
-            
-            // Show report
-            showReport();
-        }
-
-        function generateStrategies(risks) {
-            const strategiesSection = document.getElementById('strategiesSection');
-            
-            const strategies = [
-                {
-                    title: "אסטרטגיית הפחתת סיכונים טכנולוגיים",
-                    items: [
-                        {
-                            title: "גיוס מומחים",
-                            desc: "גיוס צוות מומחי AI ולמידת מכונה בעלי ניסיון מוכח",
-                            timeline: "מיידי"
-                        },
-                        {
-                            title: "שותפויות אקדמיות",
-                            desc: "יצירת שיתופי פעולה עם מוסדות אקדמיים מובילים",
-                            timeline: "תוך 3 חודשים"
-                        },
-                        {
-                            title: "פיילוט מדורג",
-                            desc: "הרצת פיילוט מצומצם לבדיקת הטכנולוגיה",
-                            timeline: "תוך 6 חודשים"
-                        }
-                    ]
-                },
-                {
-                    title: "תוכנית ניהול שינוי והכשרות",
-                    items: [
-                        {
-                            title: "סדנאות הכנה",
-                            desc: "הרצת סדנאות הכנה למורים ומנהלים",
-                            timeline: "לפני ההטמעה"
-                        },
-                        {
-                            title: "מורים מובילים",
-                            desc: "הכשרת מורים מובילים כשגרירי השינוי",
-                            timeline: "תוך 4 חודשים"
-                        },
-                        {
-                            title: "תמיכה מתמשכת",
-                            desc: "הקמת מערך תמיכה 24/7 למורים",
-                            timeline: "עם תחילת ההטמעה"
-                        }
-                    ]
-                },
-                {
-                    title: "מערך אבטחת מידע מתקדם",
-                    items: [
-                        {
-                            title: "תשתית מאובטחת",
-                            desc: "בניית תשתית ענן מאובטחת בתקני ISO 27001",
-                            timeline: "תוך 3 חודשים"
-                        },
-                        {
-                            title: "הצפנה מלאה",
-                            desc: "הטמעת הצפנה מקצה לקצה לכל המידע",
-                            timeline: "מיידי"
-                        },
-                        {
-                            title: "ביקורות אבטחה",
-                            desc: "ביצוע ביקורות אבטחה רבעוניות",
-                            timeline: "מתמשך"
-                        }
-                    ]
-                }
-            ];
-            
-            strategiesSection.innerHTML = strategies.map(strategy => `
-                <div class="strategy-card">
-                    <div class="strategy-header editable">${strategy.title}</div>
-                    <div class="strategy-content">
-                        <div class="strategy-detail">
-                            ${strategy.items.map(item => `
-                                <div class="detail-item">
-                                    <h5 class="editable">${item.title}</h5>
-                                    <p class="editable">${item.desc}</p>
-                                    <span class="timeline-badge editable">${item.timeline}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function showReport() {
-            // Hide processing
-            document.getElementById('processingStep').classList.remove('active');
-            
-            // Show report
-            document.getElementById('reportStep').classList.add('active');
-            document.getElementById('controlButtons').style.display = 'flex';
-            
-            // Initialize navigation
-            initializeNavigation();
-            
-            // Show success message
-            showSuccessMessage('הדוח נוצר בהצלחה! 🎉\nכעת תוכל לערוך ולייצא את הדוח');
-        }
-
-        function initializeNavigation() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Remove active class from all links
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    
-                    // Add active class to clicked link
-                    this.classList.add('active');
-                    
-                    // Smooth scroll to section
-                    const targetId = this.getAttribute('href');
-                    const targetSection = document.querySelector(targetId);
-                    
-                    if (targetSection) {
-                        targetSection.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-            
-            // Highlight active section on scroll
-            window.addEventListener('scroll', function() {
-                let current = '';
-                const sections = document.querySelectorAll('.section');
-                
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionHeight = section.clientHeight;
-                    
-                    if (window.pageYOffset >= sectionTop - 100) {
-                        current = section.getAttribute('id');
-                    }
-                });
-                
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === '#' + current) {
-                        link.classList.add('active');
-                    }
-                });
-            });
-        }
-
-        function toggleEdit() {
-            isEditMode = !isEditMode;
-            const editBtn = document.querySelector('.edit-toggle');
-            const editables = document.querySelectorAll('.editable');
-            
-            if (isEditMode) {
-                editBtn.classList.add('active');
-                editBtn.innerHTML = '✅ סיים עריכה';
-                editables.forEach(el => {
-                    el.setAttribute('contenteditable', 'true');
-                });
-                showSuccessMessage('מצב עריכה הופעל ✏️\nלחץ על כל טקסט כדי לערוך');
-            } else {
-                editBtn.classList.remove('active');
-                editBtn.innerHTML = '🎨 התחל עריכה';
-                editables.forEach(el => {
-                    el.setAttribute('contenteditable', 'false');
-                });
-                showSuccessMessage('העריכה הסתיימה ונשמרה ✅');
-            }
-        }
-
-        async function exportToPDF() {
-            const exportBtn = document.querySelector('.pdf-export');
-            exportBtn.classList.add('exporting');
-            exportBtn.innerHTML = '⏳ מייצא...';
-            exportBtn.disabled = true;
-            
-            // End edit mode if active
-            if (isEditMode) {
-                toggleEdit();
-            }
-            
-            showSuccessMessage('מכין את הקובץ להורדה... ⏳');
-            
-            // Wait a moment for UI to update
-            await new Promise(resolve => setTimeout(resolve, 500));
-            
-            // Use browser's print functionality
-            window.print();
-            
-            // Reset button
-            setTimeout(() => {
-                exportBtn.classList.remove('exporting');
-                exportBtn.innerHTML = '📄 ייצוא ל-PDF';
-                exportBtn.disabled = false;
-                showSuccessMessage('הדוח מוכן להורדה! 📄\nבחר "Save as PDF" בחלון ההדפסה');
-            }, 1000);
-        }
-
-        function showUploadStep() {
-            document.getElementById('uploadStep').style.display = 'block';
-            document.getElementById('processingStep').classList.remove('active');
-            document.getElementById('reportStep').classList.remove('active');
-            document.getElementById('controlButtons').style.display = 'none';
-            
-            // Reset file input
-            document.getElementById('fileInput').value = '';
-        }
-
-        function showSuccessMessage(message) {
-            const successMsg = document.getElementById('successMessage');
-            successMsg.textContent = message;
-            successMsg.classList.add('show');
-            
-            setTimeout(() => {
-                successMsg.classList.remove('show');
-            }, 3000);
-        }
-    </script>
-</body>
-</html>
