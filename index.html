@@ -23,7 +23,10 @@
             background: rgba(255, 255, 255, 0.98);
             border-radius: 20px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            display: block;
         }
+        .generator-view.hidden { display: none; }
+
         .generator-view h1 {
             text-align: center;
             font-size: 2.5em;
@@ -86,9 +89,11 @@
         
         /* --- Report View Styles (Copied from user's sample) --- */
         .report-view { display: none; }
+        .report-view.visible { display: block; }
+        
         .container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 20px auto;
             background: rgba(255, 255, 255, 0.98);
             border-radius: 20px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
@@ -159,7 +164,11 @@
         .impact-list li, .opportunity-list li { padding: 8px 0; border-bottom: 1px solid #ecf0f1; position: relative; }
         .impact-list li::before { content: '⚠️'; margin-left: 10px; }
         .opportunity-list li::before { content: '✅'; margin-left: 10px; }
-        
+        .strategies-section { padding: 30px; background: #ecf0f1; }
+        .strategy-card { background: white; margin: 20px 0; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); overflow: hidden; }
+        .strategy-header { background: #27ae60; color: white; padding: 20px; font-size: 1.2em; font-weight: bold; }
+        .strategy-content { padding: 20px; }
+
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 9999; }
         .loading-overlay.active { display: flex; }
         .loading-spinner { width: 60px; height: 60px; border: 5px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; }
@@ -237,6 +246,10 @@
                 apiKey: document.getElementById('api-key').value,
             };
 
+            if (!inputs.projectName || !inputs.projectDescription || !inputs.projectGoals) {
+                alert('אנא מלא את כל פרטי הפרויקט.');
+                return;
+            }
             if (!inputs.apiKey) {
                 alert('אנא הזן מפתח API של Google Gemini.');
                 return;
@@ -256,11 +269,11 @@
                 const parsedData = parseAIResponse(aiResponse);
                 
                 // 6. Render the report
-                renderReport(parsedData);
+                renderReport(parsedData, inputs);
 
                 // 7. Switch views
-                generatorView.style.display = 'none';
-                reportView.style.display = 'block';
+                generatorView.classList.add('hidden');
+                reportView.classList.add('visible');
 
             } catch (error) {
                 console.error("Error generating report:", error);
@@ -273,7 +286,6 @@
         
         function constructMegaPrompt(data) {
             // This function creates the detailed prompt based on user input and your methodology
-            // For the simulation, it's less critical, but in a real app, this would be very detailed.
             return `
                 Project Name: ${data.projectName}
                 Description: ${data.projectDescription}
@@ -283,9 +295,7 @@
                 Please generate a comprehensive risk management report based on the project details above.
                 Format the response clearly using the following structure. Do NOT add any extra text before or after.
                 
-                [REPORT_TITLE]: The project name
-                [REPORT_SUBTITLE]: The project description
-                [REPORT_ENTITY]: The main stakeholder
+                [REPORT_ENTITY]: The main stakeholder group
                 
                 [RISK_CARD_START]
                 [RISK_TITLE]: Title of the first risk
@@ -311,12 +321,9 @@
         async function simulateGeminiResponse(prompt) {
             console.log("Simulating API call with prompt:", prompt);
             // This function mimics a real API call with a delay.
-            // The response is a pre-written string formatted exactly as we requested in the prompt.
             return new Promise(resolve => {
                 setTimeout(() => {
                     const sampleResponse = `
-                        [REPORT_TITLE]: תפיסת חטיבת הנעורים
-                        [REPORT_SUBTITLE]: עיצוב מחדש של החינוך לגילאי 12-15
                         [REPORT_ENTITY]: משרד החינוך • 2025
 
                         [RISK_CARD_START]
@@ -365,50 +372,37 @@
         }
 
         function parseAIResponse(responseText) {
-            const data = {
-                risks: [],
-                strategies: [],
-            };
+            const data = { risks: [], strategies: {} };
 
-            function extractValue(key) {
+            const extractValue = (key) => {
                 const regex = new RegExp(`\\[${key}\\]: (.*?)(?=\\n\\[|$)`, 's');
                 const match = responseText.match(regex);
                 return match ? match[1].trim() : '';
-            }
+            };
 
-            data.title = extractValue('REPORT_TITLE');
-            data.subtitle = extractValue('REPORT_SUBTITLE');
             data.entity = extractValue('REPORT_ENTITY');
 
-            // Parse risks
             const riskBlocks = responseText.split('[RISK_CARD_START]').slice(1);
-            riskBlocks.forEach(block => {
-                const risk = {};
-                risk.title = block.match(/\[RISK_TITLE\]: (.*?)\n/s)[1].trim();
-                risk.severityLevel = block.match(/\[RISK_SEVERITY_LEVEL\]: (.*?)\n/s)[1].trim();
-                risk.probability = block.match(/\[RISK_PROBABILITY\]: (.*?)\n/s)[1].trim();
-                risk.impact = block.match(/\[RISK_IMPACT\]: (.*?)\n/s)[1].trim();
-                risk.description = block.match(/\[RISK_DESCRIPTION\]: (.*?)(?=\n\[RISK_CONSEQUENCES\])/s)[1].trim();
-                risk.consequences = block.match(/\[RISK_CONSEQUENCES\]: (.*?)(?=\n\[RISK_OPPORTUNITIES\])/s)[1].trim().split('*').map(s => s.trim()).filter(Boolean);
-                risk.opportunities = block.match(/\[RISK_OPPORTUNITIES\]: (.*?)(?=\n\[RISK_CARD_END\])/s)[1].trim().split('*').map(s => s.trim()).filter(Boolean);
-                data.risks.push(risk);
-            });
+            data.risks = riskBlocks.map(block => ({
+                title: (block.match(/\[RISK_TITLE\]: (.*?)\n/s) || [])[1]?.trim() || '',
+                severityLevel: (block.match(/\[RISK_SEVERITY_LEVEL\]: (.*?)\n/s) || [])[1]?.trim() || '',
+                probability: (block.match(/\[RISK_PROBABILITY\]: (.*?)\n/s) || [])[1]?.trim() || '',
+                impact: (block.match(/\[RISK_IMPACT\]: (.*?)\n/s) || [])[1]?.trim() || '',
+                description: (block.match(/\[RISK_DESCRIPTION\]: (.*?)(?=\n\[RISK_CONSEQUENCES\])/s) || [])[1]?.trim() || '',
+                consequences: (block.match(/\[RISK_CONSEQUENCES\]: (.*?)(?=\n\[RISK_OPPORTUNITIES\])/s) || [])[1]?.trim().split('*').map(s => s.trim()).filter(Boolean) || [],
+                opportunities: (block.match(/\[RISK_OPPORTUNITIES\]: (.*?)(?=\n\[RISK_CARD_END\])/s) || [])[1]?.trim().split('*').map(s => s.trim()).filter(Boolean) || [],
+            }));
 
-            // Parse strategies
             const strategyBlocks = responseText.split('[STRATEGY_START]').slice(1);
-            strategyBlocks.forEach(block => {
-                const strategy = {};
-                strategy.title = block.match(/\[STRATEGY_TITLE\]: (.*?)\n/s)[1].trim();
-                strategy.description = block.match(/\[STRATEGY_DESCRIPTION\]: (.*?)(?=\n\[STRATEGY_END\])/s)[1].trim();
-                data.strategies.push(strategy);
-            });
+            data.strategies = strategyBlocks.map(block => ({
+                title: (block.match(/\[STRATEGY_TITLE\]: (.*?)\n/s) || [])[1]?.trim() || '',
+                description: (block.match(/\[STRATEGY_DESCRIPTION\]: (.*?)(?=\n\[STRATEGY_END\])/s) || [])[1]?.trim() || '',
+            }));
 
             return data;
         }
 
-        function renderReport(data) {
-            // This function takes the parsed data and builds the HTML for the report
-            
+        function renderReport(data, inputs) {
             const severityMap = {
                 "Very High": { class: "very-high", text: "חומרה גבוהה מאוד" },
                 "High": { class: "high", text: "חומרה גבוהה" },
@@ -418,8 +412,7 @@
 
             const riskSummary = data.risks.reduce((acc, risk) => {
                 const level = risk.severityLevel;
-                if (!acc[level]) acc[level] = 0;
-                acc[level]++;
+                acc[level] = (acc[level] || 0) + 1;
                 return acc;
             }, {});
 
@@ -459,25 +452,25 @@
                     </div>
                 </div>
             `).join('');
-
+            
             const finalHTML = `
                 <div class="control-buttons">
-                    <button class="control-btn edit-toggle" onclick="toggleEdit(this)">🎨 התחל עריכה</button>
+                    <button class="control-btn new-report-btn" onclick="window.location.reload()">🔄 דוח חדש</button>
+                    <button class="control-btn edit-toggle" id="edit-toggle-btn">🎨 התחל עריכה</button>
                     <button class="control-btn pdf-export" onclick="window.print()">📄 ייצוא ל-PDF</button>
-                    <button class="control-btn html-export" onclick="alert('לשמירה: לחץ Ctrl+S ובחר Web Page, Complete')">💾 שמור כ-HTML</button>
                     <div class="success-message" id="successMessage"></div>
                 </div>
 
                 <header class="header">
-                    <h1 class="editable">${data.title}</h1>
-                    <div class="subtitle editable">${data.subtitle}</div>
+                    <h1 class="editable">${inputs.projectName}</h1>
+                    <div class="subtitle editable">${inputs.projectDescription}</div>
                     <div class="date-badge editable">${data.entity}</div>
                 </header>
 
                 <nav class="nav-menu">
                     <ul class="nav-links">
-                        <li><a href="#risks" class="nav-link">⚠️ ניהול סיכונים</a></li>
-                        <li><a href="#strategies" class="nav-link">📈 תוכנית התמודדות</a></li>
+                        <li><a href="#risks">⚠️ ניהול סיכונים</a></li>
+                        <li><a href="#strategies">📈 תוכנית התמודדות</a></li>
                     </ul>
                 </nav>
 
@@ -501,16 +494,15 @@
             `;
             
             reportContainer.innerHTML = finalHTML;
-            setupReportInteractivity();
+            
+            // Attach event listener to the new button
+            const editBtn = document.getElementById('edit-toggle-btn');
+            if (editBtn) {
+                editBtn.addEventListener('click', () => toggleEdit(editBtn));
+            }
         }
         
-        // --- Interactivity for the final report ---
-        function setupReportInteractivity() {
-            // This function would contain logic for the final report,
-            // like the scroll-spy for the nav menu if needed.
-        }
-
-        window.toggleEdit = function(button) {
+        function toggleEdit(button) {
             const isEditing = !button.classList.contains('active');
             const editableElements = reportContainer.querySelectorAll('.editable');
             const successMsg = document.getElementById('successMessage');
