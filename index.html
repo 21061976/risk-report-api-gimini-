@@ -1630,3 +1630,753 @@
         const uploadZone = document.getElementById('uploadZone');
         
         uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+        
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+        
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        async function handleFile(file) {
+            if (!apiKey) {
+                showApiStatus('error', 'נא להגדיר מפתח API תחילה');
+                return;
+            }
+
+            const validTypes = ['.docx', '.pdf', '.txt'];
+            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+            
+            if (!validTypes.includes(fileExtension)) {
+                alert('נא לבחור קובץ Word, PDF או טקסט');
+                return;
+            }
+            
+            if (file.size > 16 * 1024 * 1024) {
+                alert('הקובץ גדול מדי. מקסימום 16MB');
+                return;
+            }
+            
+            await processFile(file);
+        }
+
+        async function processFile(file) {
+            // Show processing UI
+            document.getElementById('uploadStep').style.display = 'none';
+            document.getElementById('processingStep').classList.add('active');
+            
+            // Show file info
+            document.getElementById('fileInfo').innerHTML = `
+                <strong>קובץ:</strong> ${file.name}<br>
+                <strong>גודל:</strong> ${(file.size / 1024 / 1024).toFixed(2)} MB<br>
+                <strong>סוג:</strong> ${file.type || 'לא ידוע'}
+            `;
+            
+            // Start processing steps
+            updateProcessingStep(1);
+            
+            try {
+                // Extract text from file
+                const text = await extractTextFromFile(file);
+                
+                if (!text || text.trim().length < 50) {
+                    alert('לא ניתן לקרוא את תוכן הקובץ או שהקובץ ריק');
+                    showUploadStep();
+                    return;
+                }
+                
+                // Update to analysis step
+                updateProcessingStep(2);
+                
+                // Analyze with Gemini
+                await analyzeWithGemini(text);
+                
+            } catch (error) {
+                console.error('Error processing file:', error);
+                alert('שגיאה בעיבוד הקובץ. נסה שוב.');
+                showUploadStep();
+            }
+        }
+
+        function updateProcessingStep(stepNumber) {
+            const steps = ['step1', 'step2', 'step3', 'step4'];
+            const progressFill = document.getElementById('progressFill');
+            
+            for (let i = 0; i < stepNumber; i++) {
+                document.getElementById(steps[i]).classList.add('active');
+                if (i === stepNumber - 1) {
+                    document.getElementById(steps[i]).classList.add('current');
+                } else {
+                    document.getElementById(steps[i]).classList.remove('current');
+                }
+            }
+            
+            progressFill.style.width = (stepNumber / steps.length * 100) + '%';
+            
+            const statusMessages = [
+                'קורא את הקובץ...',
+                'מנתח עם Google Gemini AI...',
+                'יוצר דוח מפורט...',
+                'הדוח מוכן!'
+            ];
+            document.getElementById('loadingStatus').textContent = statusMessages[stepNumber - 1];
+        }
+
+        async function extractTextFromFile(file) {
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            
+            if (fileExtension === 'txt') {
+                return await extractTextFromTxt(file);
+            } else if (fileExtension === 'pdf') {
+                return await extractTextFromPDF(file);
+            } else if (fileExtension === 'docx') {
+                return await extractTextFromDocx(file);
+            }
+            
+            return null;
+        }
+
+        async function extractTextFromTxt(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = reject;
+                reader.readAsText(file, 'utf-8');
+            });
+        }
+
+        async function extractTextFromPDF(file) {
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                let fullText = '';
+                
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(' ');
+                    fullText += pageText + '\n';
+                }
+                
+                return fullText;
+            } catch (error) {
+                console.error('Error extracting PDF text:', error);
+                return null;
+            }
+        }
+
+        async function extractTextFromDocx(file) {
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const result = await mammoth.extractRawText({ arrayBuffer });
+                return result.value;
+            } catch (error) {
+                console.error('Error extracting DOCX text:', error);
+                return null;
+            }
+        }
+
+        async function analyzeWithGemini(text) {
+            // Show loading overlay
+            document.getElementById('loadingOverlay').classList.add('active');
+            
+            try {
+                // Create detailed prompt based on methodology
+                const prompt = `
+אתה עזרא - מומחה בניתוח סיכונים וניהול פרויקטים חינוכיים במשרד החינוך הישראלי.
+אתה מתמחה בניהול סיכונים דינמי ורגולציה לחדשנות חינוכית.
+
+קיבלת מסמך הכולל תיאור של פרויקט חינוכי חדשני.
+עליך לנתח את המסמך ולהפיק דוח ניהול סיכונים מקיף לפי המתודולוגיה המדויקת הבאה:
+
+## שלב 1: זיהוי מטרות
+חלץ מהמסמך עד 3 מטרות מרכזיות של הפרויקט. כל מטרה צריכה:
+- להיות ממוקדת וברורה
+- לכלול כותרת קצרה ותיאור מפורט
+- לשקף את המהות האמיתית של הפרויקט
+
+## שלב 2: זיהוי סיכונים על בסיס המטרות
+לכל מטרה שזיהית, מצא סיכונים פוטנציאליים הנובעים ממנה:
+- כל סיכון חייב להיות מקושר למטרה אחת לפחות
+- ציין בכותרת הסיכון "(נגזר ממטרה X)" או "(נגזר ממטרות X,Y)"
+- זהה 4-6 סיכונים בסך הכל
+
+## שלב 3: דירוג סיכונים
+לכל סיכון קבע:
+- הסתברות: 1-10
+- עוצמת נזק: 1-10
+- דרגת חומרה: הסתברות × עוצמת נזק
+- רמת חומרה: גבוה מאוד (70+) / גבוה (50-69) / בינוני (30-49) / נמוך (תחת 30)
+
+## שלב 4: השפעות והזדמנויות
+לכל סיכון זהה:
+- 3 השפעות שליליות אפשריות
+- 3 הזדמנויות חיוביות שעשויות לנבוע מההתמודדות עם הסיכון
+
+## שלב 5: אסטרטגיות התמודדות
+צור 3 אסטרטגיות מרכזיות להתמודדות עם הסיכונים שזיהית:
+- כל אסטרטגיה צריכה להתייחס לסיכונים ספציפיים
+- תאר כיצד האסטרטגיה מסייעת במימוש המטרות
+
+## שלב 6: המלצות מבוססות מטרות וסיכונים
+צור 3 המלצות מרכזיות לוועדה:
+- כל המלצה חייבת להתייחס למטרות ולסיכונים שזיהית
+- ציין בסוגריים לאילו מטרות ההמלצה מתייחסת
+- ההמלצות צריכות ליצור מעגל שלם: מטרות → סיכונים → המלצות
+
+המסמך לניתוח:
+${text}
+
+החזר תשובה בפורמט JSON בדיוק לפי המבנה הבא (אל תוסיף שום טקסט מחוץ ל-JSON):
+{
+    "projectName": "שם הפרויקט",
+    "projectDescription": "תיאור קצר של הפרויקט",
+    "organization": "שם הארגון",
+    "projectManager": "שם מנהל הפרויקט",
+    "projectScope": "היקף הפרויקט",
+    "timeline": "לוח זמנים",
+    "projectType": "סוג הפרויקט",
+    "regulatoryPartners": "שותפים רגולטורים",
+    "goals": [
+        {
+            "id": 1,
+            "title": "כותרת המטרה",
+            "description": "תיאור מפורט של המטרה"
+        }
+    ],
+    "deliverables": [
+        "תוצר 1",
+        "תוצר 2",
+        "תוצר 3",
+        "תוצר 4"
+    ],
+    "risks": [
+        {
+            "id": 1,
+            "title": "כותרת הסיכון (נגזר ממטרה X)",
+            "relatedGoals": [1],
+            "severity": "גבוה מאוד/גבוה/בינוני/נמוך",
+            "probability": 8,
+            "impact": 9,
+            "riskScore": 72,
+            "description": "תיאור מפורט של הסיכון",
+            "impacts": [
+                "השפעה אפשרית 1",
+                "השפעה אפשרית 2",
+                "השפעה אפשרית 3"
+            ],
+            "opportunities": [
+                "הזדמנות 1",
+                "הזדמנות 2",
+                "הזדמנות 3"
+            ]
+        }
+    ],
+    "strategies": [
+        {
+            "title": "אסטרטגיה 1",
+            "description": "תיאור האסטרטגיה",
+            "relatedRisks": [1, 2]
+        }
+    ],
+    "innovationLevel": {
+        "score": 8.5,
+        "description": "תיאור רמת החדשנות",
+        "definition": "הגדרת סוג החדשנות",
+        "committeeRecommendation": "המלצת ועדת המשנה לאסדרת חדשנות",
+        "components": [
+            {
+                "title": "השפעה פדגוגית",
+                "score": 9.0,
+                "description": "תיאור"
+            },
+            {
+                "title": "מורכבות טכנולוגית",
+                "score": 8.5,
+                "description": "תיאור"
+            },
+            {
+                "title": "שינוי ארגוני",
+                "score": 8.0,
+                "description": "תיאור"
+            },
+            {
+                "title": "סיכון טכנולוגי",
+                "score": 7.5,
+                "description": "תיאור"
+            }
+        ]
+    },
+    "regulations": [
+        {
+            "requirement": "דרישת אסדרה",
+            "description": "תיאור",
+            "status": "תואם מלא/בתהליך/דורש התייחסות",
+            "actions": "פעולות נדרשות"
+        }
+    ],
+    "executiveSummary": "סיכום מנהלים מקיף המתייחס למטרות, לסיכונים המרכזיים ולדרכי ההתמודדות",
+    "recommendations": [
+        {
+            "title": "המלצה 1",
+            "description": "תיאור מפורט של ההמלצה המתייחסת למטרות ולסיכונים (מטרה 1)",
+            "relatedGoals": [1],
+            "relatedRisks": [1]
+        }
+    ]
+}
+
+חובה להחזיר רק JSON תקין ללא שום טקסט נוסף!`;
+
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: prompt
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            maxOutputTokens: 8192,
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Gemini API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+                    throw new Error('Invalid response from Gemini API');
+                }
+
+                const generatedText = data.candidates[0].content.parts[0].text;
+                
+                // Try to parse JSON from response
+                let jsonMatch = generatedText.match(/\{[\s\S]*\}/);
+                if (!jsonMatch) {
+                    // Try to find JSON in code blocks
+                    jsonMatch = generatedText.match(/```json\s*(\{[\s\S]*\})\s*```/);
+                    if (jsonMatch) {
+                        jsonMatch[0] = jsonMatch[1];
+                    }
+                }
+                
+                if (jsonMatch) {
+                    try {
+                        reportData = JSON.parse(jsonMatch[0]);
+                        
+                        // Validate required fields
+                        if (!reportData.projectName || !reportData.goals || !reportData.risks) {
+                            throw new Error('Missing required fields in response');
+                        }
+                        
+                        // Update to report generation step
+                        updateProcessingStep(3);
+                        
+                        // Generate report
+                        generateReport(reportData);
+                        
+                    } catch (parseError) {
+                        console.error('JSON Parse Error:', parseError);
+                        throw new Error('Failed to parse AI response');
+                    }
+                } else {
+                    throw new Error('No valid JSON found in response');
+                }
+                
+            } catch (error) {
+                console.error('Gemini API Error:', error);
+                alert('שגיאה בניתוח המסמך. ודא שמפתח ה-API תקין ונסה שוב.');
+                showUploadStep();
+            } finally {
+                document.getElementById('loadingOverlay').classList.remove('active');
+            }
+        }
+
+        function generateReport(data) {
+            // Update header
+            document.getElementById('reportTitle').textContent = 'דוח ניהול סיכונים מקיף';
+            document.getElementById('reportSubtitle').textContent = data.projectName || 'שם הפרויקט';
+            document.getElementById('reportBadge').textContent = `${data.organization || 'משרד החינוך'} • ${new Date().getFullYear()}`;
+            
+            // Update project overview
+            const overviewGrid = document.getElementById('projectOverview');
+            overviewGrid.innerHTML = `
+                <div class="overview-card">
+                    <h4><span class="icon">👤</span>מנהל הפרויקט</h4>
+                    <p class="editable">${data.projectManager || 'לא צוין'}</p>
+                </div>
+                <div class="overview-card">
+                    <h4><span class="icon">🏢</span>ארגון</h4>
+                    <p class="editable">${data.organization || 'לא צוין'}</p>
+                </div>
+                <div class="overview-card">
+                    <h4><span class="icon">🌍</span>היקף הפרויקט</h4>
+                    <p class="editable">${data.projectScope || 'לא צוין'}</p>
+                </div>
+                <div class="overview-card">
+                    <h4><span class="icon">📅</span>לוח זמנים</h4>
+                    <p class="editable">${data.timeline || 'לא צוין'}</p>
+                </div>
+                <div class="overview-card">
+                    <h4><span class="icon">🚀</span>סוג הפרויקט</h4>
+                    <p class="editable">${data.projectType || 'לא צוין'}</p>
+                </div>
+                <div class="overview-card">
+                    <h4><span class="icon">🤝</span>שותפים רגולטורים</h4>
+                    <p class="editable">${data.regulatoryPartners || 'לא צוין'}</p>
+                </div>
+            `;
+            
+            // Update goals
+            const goalsDiv = document.getElementById('projectGoals');
+            if (data.goals && data.goals.length > 0) {
+                goalsDiv.innerHTML = data.goals.map((goal, index) => `
+                    <div class="goal-item editable">
+                        <strong>${index + 1}. ${goal.title}</strong><br>
+                        ${goal.description}
+                    </div>
+                `).join('');
+            }
+            
+            // Update deliverables
+            const deliverablesDiv = document.getElementById('projectDeliverables');
+            if (data.deliverables && data.deliverables.length > 0) {
+                deliverablesDiv.innerHTML = data.deliverables.map(deliverable => 
+                    `<div class="deliverable-item editable">${deliverable}</div>`
+                ).join('');
+            }
+            
+            // Update risk summary
+            const riskCounts = {
+                'גבוה מאוד': 0,
+                'גבוה': 0,
+                'בינוני': 0,
+                'נמוך': 0
+            };
+            
+            if (data.risks) {
+                data.risks.forEach(risk => {
+                    riskCounts[risk.severity] = (riskCounts[risk.severity] || 0) + 1;
+                });
+            }
+            
+            const summaryDiv = document.getElementById('riskSummary');
+            summaryDiv.innerHTML = `
+                <div class="summary-card">
+                    <div class="summary-number very-high">${riskCounts['גבוה מאוד']}</div>
+                    <div>סיכונים בחומרה<br>גבוהה מאוד</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-number high">${riskCounts['גבוה']}</div>
+                    <div>סיכונים בחומרה<br>גבוהה</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-number medium">${riskCounts['בינוני']}</div>
+                    <div>סיכונים בחומרה<br>בינונית</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-number low">${riskCounts['נמוך']}</div>
+                    <div>סיכונים בחומרה<br>נמוכה</div>
+                </div>
+            `;
+            
+            // Update risks grid
+            const risksGrid = document.getElementById('risksGrid');
+            if (data.risks && data.risks.length > 0) {
+                risksGrid.innerHTML = data.risks.map(risk => {
+                    const severityClass = {
+                        'גבוה מאוד': 'risk-very-high',
+                        'גבוה': 'risk-high',
+                        'בינוני': 'risk-medium',
+                        'נמוך': 'risk-low'
+                    }[risk.severity] || 'risk-medium';
+                    
+                    const severityBadgeClass = {
+                        'גבוה מאוד': 'severity-very-high',
+                        'גבוה': 'severity-high',
+                        'בינוני': 'severity-medium',
+                        'נמוך': 'severity-low'
+                    }[risk.severity] || 'severity-medium';
+                    
+                    return `
+                        <div class="risk-card ${severityClass}">
+                            <div class="risk-header">
+                                <h3 class="risk-title editable">${risk.title}</h3>
+                                <span class="risk-severity ${severityBadgeClass} editable">${risk.severity}</span>
+                            </div>
+                            <div class="risk-metrics">
+                                <div class="metric">
+                                    <div class="metric-value editable">${risk.probability}</div>
+                                    <div class="metric-label">הסתברות</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value editable">${risk.impact}</div>
+                                    <div class="metric-label">עוצמת נזק</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value editable">${risk.riskScore}</div>
+                                    <div class="metric-label">דרגת חומרה</div>
+                                </div>
+                            </div>
+                            <div class="risk-description editable">${risk.description}</div>
+                            ${risk.impacts && risk.impacts.length > 0 ? `
+                                <div class="risk-impact">
+                                    <div class="impact-title">השלכות אפשריות:</div>
+                                    <ul class="impact-list">
+                                        ${risk.impacts.map(impact => `<li class="editable">${impact}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                            ${risk.opportunities && risk.opportunities.length > 0 ? `
+                                <div>
+                                    <div class="opportunity-title">הזדמנויות:</div>
+                                    <ul class="opportunity-list">
+                                        ${risk.opportunities.map(opp => `<li class="editable">${opp}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // Generate strategies
+            const strategiesSection = document.getElementById('strategiesSection');
+            if (data.strategies && data.strategies.length > 0) {
+                strategiesSection.innerHTML = data.strategies.map((strategy, index) => `
+                    <div class="strategy-card">
+                        <div class="strategy-header editable">אסטרטגיה ${index + 1}: ${strategy.title}</div>
+                        <div class="strategy-content">
+                            <p class="editable">${strategy.description}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Update innovation section
+            if (data.innovationLevel) {
+                document.getElementById('innovationScore').textContent = `${data.innovationLevel.score} / 10`;
+                document.getElementById('innovationDescription').textContent = data.innovationLevel.description || 'הפרויקט כולל אלמנטים חדשניים';
+                
+                if (data.innovationLevel.components) {
+                    document.getElementById('innovationComponents').innerHTML = data.innovationLevel.components.map(comp => `
+                        <div class="component-card">
+                            <div class="component-score editable">${comp.score}</div>
+                            <div class="component-title editable">${comp.title}</div>
+                            <p class="editable">${comp.description}</p>
+                        </div>
+                    `).join('');
+                }
+            }
+            
+            // Update regulations table
+            if (data.regulations && data.regulations.length > 0) {
+                const tbody = document.getElementById('regulationTableBody');
+                tbody.innerHTML = data.regulations.map(reg => {
+                    const statusColor = {
+                        'תואם מלא': '#34a853',
+                        'בתהליך': '#fbbc04',
+                        'דורש התייחסות': '#ea4335'
+                    }[reg.status] || '#757575';
+                    
+                    return `
+                        <tr>
+                            <td class="editable">${reg.requirement}</td>
+                            <td class="editable">${reg.description}</td>
+                            <td class="editable" style="color: ${statusColor}; font-weight: bold;">${reg.status}</td>
+                            <td class="editable">${reg.actions}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+            
+            // Update executive summary
+            if (data.executiveSummary) {
+                document.getElementById('executiveSummary').textContent = data.executiveSummary;
+            }
+            
+            // Update recommendations
+            if (data.recommendations && data.recommendations.length > 0) {
+                const recommendationsList = document.getElementById('recommendationsList');
+                recommendationsList.innerHTML = data.recommendations.map((rec, index) => `
+                    <li style="background: #e8f5e9; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 4px solid #4caf50;">
+                        <strong class="editable">${index + 1}. ${rec.title}:</strong>
+                        <span class="editable">${rec.description}</span>
+                    </li>
+                `).join('');
+            }
+            
+            // Update report date
+            const today = new Date();
+            const monthNames = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
+            document.getElementById('reportDate').textContent = `${monthNames[today.getMonth()]} ${today.getFullYear()}`;
+            
+            // Update to final step
+            updateProcessingStep(4);
+            
+            // Show report after a short delay
+            setTimeout(() => {
+                showReport();
+            }, 1500);
+        }
+
+        function showReport() {
+            // Hide processing
+            document.getElementById('processingStep').classList.remove('active');
+            
+            // Show report
+            document.getElementById('reportStep').classList.add('active');
+            document.getElementById('controlButtons').style.display = 'flex';
+            
+            // Initialize navigation
+            initializeNavigation();
+            
+            // Show success message
+            showSuccessMessage('הדוח נוצר בהצלחה! 🎉\nכעת תוכל לערוך ולייצא את הדוח');
+        }
+
+        function initializeNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Smooth scroll to section
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Highlight active section on scroll
+            window.addEventListener('scroll', function() {
+                let current = '';
+                const sections = document.querySelectorAll('.section');
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        function toggleEdit() {
+            isEditMode = !isEditMode;
+            const editBtn = document.querySelector('.edit-toggle');
+            const editables = document.querySelectorAll('.editable');
+            
+            if (isEditMode) {
+                editBtn.classList.add('active');
+                editBtn.innerHTML = '✅ סיים עריכה';
+                editables.forEach(el => {
+                    el.setAttribute('contenteditable', 'true');
+                });
+                showSuccessMessage('מצב עריכה הופעל ✏️\nלחץ על כל טקסט כדי לערוך');
+            } else {
+                editBtn.classList.remove('active');
+                editBtn.innerHTML = '🎨 התחל עריכה';
+                editables.forEach(el => {
+                    el.setAttribute('contenteditable', 'false');
+                });
+                showSuccessMessage('העריכה הסתיימה ונשמרה ✅');
+            }
+        }
+
+        async function exportToPDF() {
+            const exportBtn = document.querySelector('.pdf-export');
+            exportBtn.classList.add('exporting');
+            exportBtn.innerHTML = '⏳ מייצא...';
+            exportBtn.disabled = true;
+            
+            // End edit mode if active
+            if (isEditMode) {
+                toggleEdit();
+            }
+            
+            showSuccessMessage('מכין את הקובץ להורדה... ⏳');
+            
+            // Wait a moment for UI to update
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Use browser's print functionality
+            window.print();
+            
+            // Reset button
+            setTimeout(() => {
+                exportBtn.classList.remove('exporting');
+                exportBtn.innerHTML = '📄 ייצוא ל-PDF';
+                exportBtn.disabled = false;
+                showSuccessMessage('הדוח מוכן להורדה! 📄\nבחר "Save as PDF" בחלון ההדפסה');
+            }, 1000);
+        }
+
+        function showUploadStep() {
+            document.getElementById('uploadStep').style.display = 'block';
+            document.getElementById('processingStep').classList.remove('active');
+            document.getElementById('reportStep').classList.remove('active');
+            document.getElementById('controlButtons').style.display = 'none';
+            
+            // Reset file input
+            document.getElementById('fileInput').value = '';
+        }
+
+        function showSuccessMessage(message) {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.textContent = message;
+            successMsg.classList.add('show');
+            
+            setTimeout(() => {
+                successMsg.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
