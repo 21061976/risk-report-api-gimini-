@@ -505,6 +505,13 @@
             display: block;
         }
 
+        .status-message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+
         /* Footer */
         .footer {
             background: #2c3e50;
@@ -733,7 +740,7 @@
         };
 
         // API Key Management
-        function saveAPIKey() {
+        async function saveAPIKey() {
             const keyInput = document.getElementById('apiKeyInput');
             const key = keyInput.value.trim();
             
@@ -743,14 +750,39 @@
             }
             
             if (!key.startsWith('AIza')) {
-                showAPIStatus('error', 'מפתח API לא תקין');
+                showAPIStatus('error', 'מפתח API לא תקין - חייב להתחיל ב-AIza');
                 return;
             }
             
-            apiKey = key;
-            localStorage.setItem('geminiApiKey', key);
-            showAPIStatus('success', 'מפתח API נשמר בהצלחה!');
-            document.getElementById('uploadSection').style.display = 'block';
+            // Test API key
+            showAPIStatus('info', 'בודק את המפתח...');
+            
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: 'test'
+                            }]
+                        }]
+                    })
+                });
+                
+                if (response.ok) {
+                    apiKey = key;
+                    localStorage.setItem('geminiApiKey', key);
+                    showAPIStatus('success', 'מפתח API נשמר בהצלחה!');
+                    document.getElementById('uploadSection').style.display = 'block';
+                } else {
+                    showAPIStatus('error', 'מפתח API לא תקין - נא לבדוק שוב');
+                }
+            } catch (error) {
+                showAPIStatus('error', 'שגיאה בבדיקת המפתח - נא לנסות שוב');
+            }
         }
 
         function showAPIStatus(type, message) {
@@ -864,9 +896,25 @@
                 
             } catch (error) {
                 console.error('Error processing file:', error);
-                alert('שגיאה בעיבוד הקובץ: ' + error.message);
-                location.reload();
+                
+                // Show error message with retry option
+                const errorMessage = `
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="font-size: 3em; color: #ea4335; margin-bottom: 20px;">❌</div>
+                        <h3 style="color: #ea4335; margin-bottom: 15px;">שגיאה בעיבוד הקובץ</h3>
+                        <p style="color: #666; margin-bottom: 30px;">${error.message}</p>
+                        <button class="btn-primary" onclick="location.reload()">נסה שוב</button>
+                        <button class="btn-secondary" onclick="showUploadScreen()" style="margin-right: 10px;">העלה קובץ אחר</button>
+                    </div>
+                `;
+                document.getElementById('processingScreen').innerHTML = errorMessage;
             }
+        }
+
+        function showUploadScreen() {
+            document.getElementById('processingScreen').classList.remove('active');
+            document.getElementById('setupScreen').style.display = 'block';
+            document.getElementById('fileInput').value = '';
         }
 
         function updateProcessingStep(step, status) {
@@ -1212,7 +1260,7 @@ ${text}
                 return;
             }
             
-            // Generate HTML report
+            // Generate HTML report  
             const reportHTML = generateReportHTML(reportData);
             
             // Create blob and download
@@ -1231,7 +1279,7 @@ ${text}
             location.reload();
         }
 
-        // Generate Report HTML (Full Template)
+        // Generate Report HTML - Basic version for now
         function generateReportHTML(data) {
             return `<!DOCTYPE html>
 <html lang="he" dir="rtl">
